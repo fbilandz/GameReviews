@@ -19,7 +19,7 @@ import { ListView } from '@shoutem/ui';
 import { ext } from '../const';
 import { NextArticle } from '../components/NextArticle';
 import { Review } from '../components/Review';
-
+import StarRating from 'react-native-star-rating';
 export class ArticleDetailsScreen extends React.PureComponent {
   static propTypes = {
     // The news article to display
@@ -38,6 +38,7 @@ export class ArticleDetailsScreen extends React.PureComponent {
         { "id": 1, "text": "najs", "user_id": 1 },
       ],
       loading: true,
+      rating: 2,
     }
     console.log(this.props);
     this.renderRow = this.renderRow.bind(this);
@@ -113,6 +114,16 @@ export class ArticleDetailsScreen extends React.PureComponent {
           </Image>
           <View styleName="solid">
             <Html body={article.body} />
+            <View styleName="solid h-center">
+              <StarRating
+                disable={true}
+                rating={this.state.rating}
+                maxStars={10}
+                starSize={25}
+                starStyle={{ justifyContent: 'center' }}
+                starColor={'red'}
+              />
+            </View>
             <Title styleName="h-center">Reviews</Title>
             <ListView
               data={data}
