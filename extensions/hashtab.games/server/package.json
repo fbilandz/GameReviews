@@ -1,5 +1,9 @@
 {
   "name": "hashtab.games",
+<<<<<<< HEAD
   "version": "0.0.2-build1499765980606",
+=======
+  "version": "0.0.1",
+>>>>>>> cec3dddd1a67ad26fec26a2a1d1afdc4fcec06e5
   "description": "Games"
 }
