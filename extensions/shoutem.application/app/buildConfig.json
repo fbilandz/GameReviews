@@ -1,0 +1,35 @@
+{
+  "appId": 4176,
+  "serverApiEndpoint": "apps.api.qa.sauros.hr",
+  "legacyApiEndpoint": "v4.api.qa.sauros.hr",
+  "authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiZjNjMjdhYS1lYTEyLTRjZTUtOGE4OC1hN2NhMzQ2YzA0N2MiLCJpc3MiOiJzaG91dGVtIiwic3ViIjoiYXBwbGljYXRpb246NDE3NiIsImlhdCI6MTQ5OTc2NjQ3NywicmxtIjoiYXBwLWJ1aWxkZXIiLCJhY2wiOlt7InJlc291cmNlIjoic2hvdXRlbS5jb3JlLmFwcGxpY2F0aW9ucyIsImFjdGlvbnMiOlsiYWNjZXNzIiwicmVhZCJdLCJjb25kaXRpb24iOnsiaWQiOiI0MTc2In19LHsicmVzb3VyY2UiOiJzaG91dGVtLmNvcmUuY29uZmlndXJhdGlvbnMiLCJhY3Rpb25zIjpbInJlYWQiXX1dfQ.fuaTAj0lsKawAoNl8GWeWLNdPw6eRUV9t4IzPoC_M6k",
+  "production": false,
+  "offlineMode": false,
+  "debug": true,
+  "release": false,
+  "configurationFilePath": "config.json",
+  "workingDirectories": [],
+  "linkedExtensions": [
+    "./extensions/*"
+  ],
+  "linkedPackages": [
+    "./packages/*"
+  ],
+  "excludePackages": [
+    "shoutem.firebase",
+    "shoutem.notification-center",
+    "shoutem.push-notifications",
+    "shoutem.shoutem-notification-center",
+    "shoutem.code-push"
+  ],
+  "extensionsJsPath": "./extensions.js",
+  "baseAppId": 2470,
+  "cacheFolder": "./cached-bundles",
+  "bundleIdPrefix": "",
+  "iosBundleId": "com.shoutem.ShoutemApp",
+  "androidApplicationId": "com.shoutemapp",
+  "cacheBaseApp": false,
+  "binaryVersionName": null,
+  "binaryVersionCode": null,
+  "skipNativeDependencies": false
+}

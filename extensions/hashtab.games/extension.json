@@ -1,0 +1,19 @@
+{
+  "name": "games",
+  "title": "Games",
+  "version": "0.0.2",
+  "description": "Games",
+  "platform": "1.1.*",
+  "screens": [
+    {
+      "name": "Games"
+    }
+  ],
+  "shortcuts": [
+    {
+      "title": "Gamez",
+      "name": "Gamez",
+      "screen": "@.Games"
+    }
+  ]
+}

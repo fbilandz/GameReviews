@@ -1,0 +1,9 @@
+{
+  "name": "shoutem.theme",
+  "version": "0.1.9-build1497960832029",
+  "private": true,
+  "main": "index.js",
+  "peerDependencies": {
+    "@shoutem/core": "*"
+  }
+}

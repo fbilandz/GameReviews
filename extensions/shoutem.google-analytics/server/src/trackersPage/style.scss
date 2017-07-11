@@ -1,0 +1,10 @@
+.trackers-page {
+  .table {
+    thead {
+      tr > :last-child,
+      tr > :nth-child(3) {
+        width: 17%;
+      }
+    }
+  }
+}

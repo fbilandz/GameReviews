@@ -1,0 +1,26 @@
+{
+  "name": "notification-center",
+  "title": "Notification settings",
+  "version": "0.0.7",
+  "description": "Manage push notification settings within the app",
+  "icon": "./server/assets/images/add-notifications-settings-image.png",
+  "platform": ">=1.0.26",
+  "categories":[""],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shoutem/extensions"
+  },
+  "shortcuts": [
+    {
+      "title": "Group settings",
+      "description": "List of available push groups",
+      "name": "openPushGroupsList",
+      "screen": "@.PushGroupsList"
+    }
+  ],
+  "screens": [
+    {
+      "name": "PushGroupsList"
+    }
+  ]
+}
