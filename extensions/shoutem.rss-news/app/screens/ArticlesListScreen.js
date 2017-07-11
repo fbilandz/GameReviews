@@ -72,10 +72,13 @@ export class ArticlesListScreen extends RssListScreen {
   }
 }
 
+const AUTH_EXT = "shoutem.auth.user.userId"
+
 export const mapStateToProps = (state, ownProps) => {
   const feedUrl = _.get(ownProps, 'shortcut.settings.feedUrl');
   return {
     feedUrl,
+    userId: state[AUTH_EXT],
     data: getNewsFeed(state, feedUrl),
   };
 };

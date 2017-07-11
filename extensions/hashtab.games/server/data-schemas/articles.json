@@ -52,6 +52,11 @@
       "title": "Audio",
       "referencedSchema": "shoutem.core.audio-attachments",
       "displayPriority": 8
+    }, 
+    "articleId": {
+      "type": "string",
+      "format": "single-line",
+      "title": "articleId"
     }
   }
 }

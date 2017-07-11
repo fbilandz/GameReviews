@@ -15,9 +15,10 @@ import { NavigationBar } from '@shoutem/ui/navigation';
 
 import * as _ from 'lodash';
 import moment from 'moment';
-
+import { ListView } from '@shoutem/ui';
 import { ext } from '../const';
 import { NextArticle } from '../components/NextArticle';
+import { Review } from '../components/Review';
 
 export class ArticleDetailsScreen extends React.PureComponent {
   static propTypes = {
@@ -30,6 +31,34 @@ export class ArticleDetailsScreen extends React.PureComponent {
     // function is required to show the up next view
     openArticle: React.PropTypes.func,
   };
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [
+        { "id": 1, "text": "najs", "user_id": 1 },
+      ],
+      loading: true,
+    }
+    console.log(this.props);
+    this.renderRow = this.renderRow.bind(this);
+    this.getReview = this.getReview.bind(this);
+    this.getReview();
+  }
+  getReview() {
+    fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+        //selected review are saved in responseJson.selReview
+        this.setState({
+          data: responseJson,
+          loading: false,
+        })
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 
   renderUpNext() {
     const { nextArticle, openArticle } = this.props;
@@ -45,11 +74,14 @@ export class ArticleDetailsScreen extends React.PureComponent {
 
     return null;
   }
-
+  renderRow(data, rowId) {
+    return <Review data={data} />
+  }
   render() {
     const { article } = this.props;
+    const { data } = this.state;
     const articleImage = article.image ? { uri: _.get(article, 'image.url') } : undefined;
-
+    console.log(this.props);
     return (
       <Screen styleName="full-screen paper">
         <NavigationBar
@@ -81,6 +113,11 @@ export class ArticleDetailsScreen extends React.PureComponent {
           </Image>
           <View styleName="solid">
             <Html body={article.body} />
+            <Title styleName="h-center">Reviews</Title>
+            <ListView
+              data={data}
+              renderRow={this.renderRow}
+            />
             {this.renderUpNext()}
           </View>
         </ScrollView>
