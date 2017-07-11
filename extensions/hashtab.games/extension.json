@@ -1,0 +1,7 @@
+{
+  "name": "games",
+  "title": "Games",
+  "version": "0.0.1",
+  "description": "Games",
+  "platform": "1.1.*"
+}
