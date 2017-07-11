@@ -19,3 +19,4 @@ export const themes = {
 export function ext(resourceName) {
   return resourceName ? `${pack.name}.${resourceName}` : pack.name;
 }
+

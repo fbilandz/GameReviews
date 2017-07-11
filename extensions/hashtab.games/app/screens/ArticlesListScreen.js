@@ -10,6 +10,8 @@ import { CmsListScreen } from 'shoutem.cms';
 import { ext } from '../const';
 import { ListArticleView } from '../components/ListArticleView';
 
+const db = "https://gamereviewsapp.firebaseio.com";
+
 export class ArticlesListScreen extends CmsListScreen {
   static propTypes = {
     ...CmsListScreen.propTypes,
@@ -26,6 +28,34 @@ export class ArticlesListScreen extends CmsListScreen {
       ...this.state,
       schema: ext('articles'),
     };
+  }
+
+  
+  //function for fetching reviews
+  getReview() {
+    return fetch(db + '/reviews.json')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+        //reviews are saved in responseJson.reviews
+        return responseJson.reviews;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  getReviewWithId(id){
+     return fetch(db + '/reviews/' + id + '.json')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+        //selected review are saved in responseJson.selReview
+        return responseJson.selReview;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   openArticle(article) {

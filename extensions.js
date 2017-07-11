@@ -1,4 +1,5 @@
 export default {
+  'hashtab.games': require('hashtab.games'),
   'shoutem.about': require('shoutem.about'),
   'shoutem.analytics': require('shoutem.analytics'),
   'shoutem.application': require('shoutem.application'),
