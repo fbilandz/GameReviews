@@ -12,6 +12,7 @@ import {
   View,
 } from '@shoutem/ui';
 import { NavigationBar } from '@shoutem/ui/navigation';
+import { loginRequired } from 'shoutem.auth';
 
 import * as _ from 'lodash';
 import moment from 'moment';
@@ -20,7 +21,7 @@ import { ext } from '../const';
 import { NextArticle } from '../components/NextArticle';
 import { Review } from '../components/Review';
 import StarRating from 'react-native-star-rating';
-export class ArticleDetailsScreen extends React.PureComponent {
+export class ReviewLayoutScreen extends React.PureComponent {
   static propTypes = {
     // The news article to display
     article: React.PropTypes.object.isRequired,
@@ -153,4 +154,4 @@ export class ArticleDetailsScreen extends React.PureComponent {
   }
 }
 
-export default connectStyle(ext('ArticleDetailsScreen'))(ArticleDetailsScreen);
+export default loginRequired(connectStyle(ext('ReviewLayoutScreen'))(ReviewLayoutScreen));

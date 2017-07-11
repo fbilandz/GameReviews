@@ -2,15 +2,12 @@
 // You should not change it
 import pack from './package.json';
 
-// screens imports
-import Games from './screens/Games';
-import ArticleDetailsScreen from './screens/ArticleDetailsScreen'
+import ReviewLayoutScreen from './screens/ReviewLayoutScreen'
 // themes imports
 
 
 export const screens = {
-  Games,
-  ArticleDetailsScreen
+  ReviewLayoutScreen,
 };
 
 export const themes = {
