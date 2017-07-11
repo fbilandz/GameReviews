@@ -3,5 +3,11 @@
 
 import * as extension from './extension.js';
 
-export const screens = extension.screens;
-export const themes = extension.themes;
+const screens = extension.screens;
+
+
+import reducer from './reducer'
+export {
+    reducer,
+    screens
+}
