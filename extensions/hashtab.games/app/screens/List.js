@@ -61,5 +61,5 @@ export class ArticlesFeaturedListScreen extends ArticlesListScreen {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-connectStyle(ext('ArticlesFeaturedListScreen'), {})(ArticlesFeaturedListScreen),
+  connectStyle(ext('ArticlesFeaturedListScreen'), {})(ArticlesFeaturedListScreen),
 );
