@@ -45,6 +45,18 @@ export class ArticleDetailsScreen extends React.PureComponent {
     this.getReview = this.getReview.bind(this);
     this.getReview();
   }
+  
+  
+  getRating(data)
+  {
+    let rating = 0, count = 0;
+    for(; count < data.length; count++)
+    {
+      rating += data[count].rating;
+    }
+    return rating/(count);
+  }
+
   getReview() {
     fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk')
       .then((response) => response.json())
@@ -54,12 +66,16 @@ export class ArticleDetailsScreen extends React.PureComponent {
         this.setState({
           data: responseJson,
           loading: false,
+          rating : this.getRating(responseJson)  
         })
       })
       .catch((error) => {
         console.error(error);
       });
   }
+
+  
+  
 
   renderUpNext() {
     const { nextArticle, openArticle } = this.props;
@@ -78,7 +94,7 @@ export class ArticleDetailsScreen extends React.PureComponent {
   renderRow(data, rowId) {
     return <Review data={data} />
   }
-  render() {
+  render(rating) {
     const { article } = this.props;
     const { data } = this.state;
     const articleImage = article.image ? { uri: _.get(article, 'image.url') } : undefined;
