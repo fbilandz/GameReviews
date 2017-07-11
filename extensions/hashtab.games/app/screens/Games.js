@@ -14,6 +14,8 @@ export default class Games extends Component {
       <View style={styles.container}>
         <Text style={styles.text}>Hello World!</Text>
       </View>
+
+      
     );
   }
 }

@@ -29,10 +29,9 @@ export class ArticlesListScreen extends CmsListScreen {
       schema: ext('articles'),
     };
   }
-
   
   //function for fetching reviews
-  getReview() {
+  getReviews() {
     return fetch(db + '/reviews.json')
       .then((response) => response.json())
       .then((responseJson) => {
@@ -45,7 +44,7 @@ export class ArticlesListScreen extends CmsListScreen {
       });
   }
 
-  getReviewWithId(id){
+  getReviews(id){
      return fetch(db + '/reviews/' + id + '.json')
       .then((response) => response.json())
       .then((responseJson) => {
