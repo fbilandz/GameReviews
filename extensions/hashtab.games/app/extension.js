@@ -3,13 +3,13 @@
 import pack from './package.json';
 
 // screens imports
-
+import List from './screens/List';
 
 // themes imports
 
 
 export const screens = {
-
+  List
 };
 
 export const themes = {
