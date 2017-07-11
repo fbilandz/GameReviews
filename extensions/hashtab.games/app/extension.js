@@ -4,12 +4,13 @@ import pack from './package.json';
 
 // screens imports
 import Games from './screens/Games';
-
+import ArticleDetailsScreen from './screens/ArticleDetailsScreen'
 // themes imports
 
 
 export const screens = {
-  Games
+  Games,
+  ArticleDetailsScreen
 };
 
 export const themes = {

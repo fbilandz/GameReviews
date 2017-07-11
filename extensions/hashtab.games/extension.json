@@ -6,14 +6,35 @@
   "platform": "1.1.*",
   "screens": [
     {
-      "name": "Games"
+      "name": "Games",
+      "navigatesTo": [
+        "@.ArticleDetailsScreen"
+      ]
+    },
+    {
+      "name":"ArticleDetailsScreen"
     }
   ],
   "shortcuts": [
     {
       "title": "Gamez",
       "name": "Gamez",
-      "screen": "@.Games"
+      "screen": "@.Games",
+      "adminPages": [
+        {
+          "page": "shoutem.cms.CmsPage",
+          "title": "Content",
+          "parameters": {
+            "schema": "@.articles"
+          }
+        }
+      ]
+    }
+  ],
+  "dataSchemas": [
+    {
+      "name": "articles",
+      "path": "./server/data-schemas/articles.json"
     }
   ]
 }
