@@ -2,12 +2,17 @@
 // You should not change it
 import pack from './package.json';
 
-import ReviewLayoutScreen from './screens/ReviewLayoutScreen'
+// screens imports
+import ReviewLayoutScreen from './screens/ReviewLayoutScreen';
+import AddAReviewScreen from './screens/AddAReviewScreen';
+
+
 // themes imports
 
 
 export const screens = {
   ReviewLayoutScreen,
+  AddAReviewScreen
 };
 
 export const themes = {

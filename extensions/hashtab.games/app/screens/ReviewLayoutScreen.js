@@ -11,16 +11,20 @@ import {
   Html,
   View,
 } from '@shoutem/ui';
+import { Text } from 'react-native'
 import { NavigationBar } from '@shoutem/ui/navigation';
 import { loginRequired } from 'shoutem.auth';
-
+import { closeModal, openInModal } from '@shoutem/core/navigation';
 import * as _ from 'lodash';
 import moment from 'moment';
-import { ListView } from '@shoutem/ui';
+import { ListView, Button } from '@shoutem/ui';
 import { ext } from '../const';
 import { NextArticle } from '../components/NextArticle';
 import { Review } from '../components/Review';
 import StarRating from 'react-native-star-rating';
+import AddAReviewScreen from './AddAReviewScreen';
+import { connect } from 'react-redux'
+
 export class ReviewLayoutScreen extends React.PureComponent {
   static propTypes = {
     // The news article to display
@@ -31,6 +35,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     // A function that will open the given article, this
     // function is required to show the up next view
     openArticle: React.PropTypes.func,
+    openInModal: React.PropTypes.func,
   };
   constructor(props) {
     super(props);
@@ -44,18 +49,17 @@ export class ReviewLayoutScreen extends React.PureComponent {
     console.log(this.props);
     this.renderRow = this.renderRow.bind(this);
     this.getReview = this.getReview.bind(this);
+    this.addAReview = this.addAReview.bind(this);
     this.getReview();
   }
-  
-  
-  getRating(data)
-  {
+
+
+  getRating(data) {
     let rating = 0, count = 0;
-    for(; count < data.length; count++)
-    {
+    for (; count < data.length; count++) {
       rating += data[count].rating;
     }
-    return rating/(count);
+    return rating / (count);
   }
 
   getReview() {
@@ -67,16 +71,30 @@ export class ReviewLayoutScreen extends React.PureComponent {
         this.setState({
           data: responseJson,
           loading: false,
-          rating : this.getRating(responseJson)  
+          rating: this.getRating(responseJson)
         })
       })
       .catch((error) => {
         console.error(error);
       });
   }
+  addAReview() {
+    console.log(this.props)
+    const { openInModal, closeModal, article } = this.props;
+    
+    const route = {
+      screen: ext('AddAReviewScreen'),
+      props: {
+        user: "Billy",
+        id: article.id,
+        onClose: closeModal,
+      },
+    };
 
-  
-  
+    openInModal(route);
+  }
+
+
 
   renderUpNext() {
     const { nextArticle, openArticle } = this.props;
@@ -146,6 +164,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
               data={data}
               renderRow={this.renderRow}
             />
+            <Button onPress={this.addAReview}><Text>Add a Review</Text></Button>
             {this.renderUpNext()}
           </View>
         </ScrollView>
@@ -154,4 +173,18 @@ export class ReviewLayoutScreen extends React.PureComponent {
   }
 }
 
-export default loginRequired(connectStyle(ext('ReviewLayoutScreen'))(ReviewLayoutScreen));
+const mapDispatchToProps = {
+  openInModal,
+  closeModal,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    state
+  }
+}
+
+export default loginRequired(
+  connect(null, mapDispatchToProps)(connectStyle(ext('ReviewLayoutScreen'))(ReviewLayoutScreen))
+);
+

@@ -6,8 +6,11 @@
   "platform": "1.1.*",
   "screens": [
     {
-      "name":"ReviewLayoutScreen",
+      "name": "ReviewLayoutScreen",
       "extends": "shoutem.news.ArticleDetailsScreen"
+    },
+    {
+      "name": "AddAReviewScreen"
     }
   ]
 }
