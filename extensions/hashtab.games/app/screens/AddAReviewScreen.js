@@ -21,7 +21,7 @@ export class AddAReviewScreen extends Component {
     console.log(this.props);
     this.state = {
       review: "Neki je",
-      rating: null || 0,
+      rating: props.rating !== undefined || props.rating !== null ? props.rating : 0,
       props: props
     }
     this.addAReview = this.addAReview.bind(this)

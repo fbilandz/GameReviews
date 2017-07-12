@@ -109,6 +109,23 @@ export class ReviewLayoutScreen extends React.PureComponent {
     openInModal(route);
   }
 
+  addAReview(rating){
+    console.log(this.props)
+    const { openInModal, closeModal, article } = this.props;
+
+    const route = {
+      screen: ext('AddAReviewScreen'),
+      props: {
+        user: "Billy",
+        id: article.id,
+        onClose: closeModal,
+        rating: rating,
+      },
+    };
+
+    openInModal(route);
+  }
+
 
 
   renderUpNext() {
@@ -172,7 +189,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
                 starSize={25}
                 starStyle={{ justifyContent: 'center' }}
                 starColor={'red'}
-                selectedStar={(star) => console.log(star)}
+                selectedStar={(star) => this.addAReview(star)}
               />
               <Title styleName="h-center">About</Title>
               <Html body={article.body} />
