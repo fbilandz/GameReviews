@@ -36,7 +36,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     super(props);
     this.state = {
       data: [
-        { "id": 1, "text": "najs", "user_id": 1 },
+        { "id": 1, "text": "najs", "username": "GGG" },
       ],
       loading: true,
       rating: 2,
