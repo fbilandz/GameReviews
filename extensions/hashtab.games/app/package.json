@@ -1,5 +1,8 @@
 {
   "name": "hashtab.games",
   "version": "0.0.2",
-  "description": "Games"
+  "description": "Games",
+  "dependencies": {
+    "react-native-star-rating": "^1.0.7"
+  }
 }
