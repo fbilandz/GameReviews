@@ -32,6 +32,7 @@ export class Review extends Component {
                                 maxStars={10}
                                 starSize={20}
                                 starColor={'red'}
+                                selectedStar={(star) => console.log(star)}
                             />
                         </View>
                         <Text>{this.props.data.text}</Text>

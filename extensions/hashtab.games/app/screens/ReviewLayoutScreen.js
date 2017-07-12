@@ -172,11 +172,12 @@ export class ReviewLayoutScreen extends React.PureComponent {
                 starSize={25}
                 starStyle={{ justifyContent: 'center' }}
                 starColor={'red'}
+                selectedStar={(star) => console.log(star)}
               />
               <Title styleName="h-center">About</Title>
               <Html body={article.body} />
             </View>
-            <Button styleName="full-width" onPress={this.addAReview}>
+            <Button onPress={this.addAReview}>
               <Icon name="like" />
               <Text>Add a Review</Text>
             </Button>
