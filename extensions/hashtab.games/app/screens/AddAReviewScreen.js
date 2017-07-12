@@ -21,7 +21,7 @@ export class AddAReviewScreen extends Component {
     console.log(this.props);
     this.state = {
       review: "Neki je",
-      rating: null || 0,
+      rating: props.rating !== undefined || props.rating !== null ? props.rating : 0,
       props: props
     }
     this.addAReview = this.addAReview.bind(this)
@@ -59,6 +59,7 @@ export class AddAReviewScreen extends Component {
         <StarRating
           rating={this.state.rating}
           selectedStar={(rate) => this.setState({ rating: rate })}
+          maxStars={10}
         />
         <Button onPress={this.addAReview}><Text>Add a review</Text></Button>
       </View>

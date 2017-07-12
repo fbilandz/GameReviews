@@ -40,11 +40,9 @@ export class ReviewLayoutScreen extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      data: [
-        { "id": 1, "text": "najs", "username": "GGG" },
-      ],
+      data: [],
       loading: true,
-      rating: 2,
+      rating: 0,
     }
     console.log(this.props);
     this.renderRow = this.renderRow.bind(this);
@@ -105,6 +103,23 @@ export class ReviewLayoutScreen extends React.PureComponent {
         user: "Billy",
         id: article.id,
         onClose: closeModal,
+      },
+    };
+
+    openInModal(route);
+  }
+
+  addAReview(rating){
+    console.log(this.props)
+    const { openInModal, closeModal, article } = this.props;
+
+    const route = {
+      screen: ext('AddAReviewScreen'),
+      props: {
+        user: "Billy",
+        id: article.id,
+        onClose: closeModal,
+        rating: rating,
       },
     };
 
@@ -174,18 +189,16 @@ export class ReviewLayoutScreen extends React.PureComponent {
                 starSize={25}
                 starStyle={{ justifyContent: 'center' }}
                 starColor={'red'}
+                selectedStar={(star) => this.addAReview(star)}
               />
               <Divider styleName="section-header" />
               <Title styleName="h-center">About</Title>
               <Html body={article.body} />
             </View>
-            <Divider styleName="section-header" />
-            <View style={styles.button}>
-              <Button styleName="confirmation" onPress={this.addAReview}>
-                <Icon name="comment" />
-                <Text>Add a Review</Text>
-              </Button>
-            </View>
+            <Button onPress={this.addAReview}>
+              <Icon name="like" />
+              <Text>Add a Review</Text>
+            </Button>
             <Title styleName="h-center">Reviews</Title>
             <ListView
               data={data}
