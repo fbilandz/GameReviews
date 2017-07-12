@@ -52,8 +52,22 @@ export class ReviewLayoutScreen extends React.PureComponent {
     this.addAReview = this.addAReview.bind(this);
     this.getReview();
   }
-
-
+  objToArray(data) {
+    data = JSON.stringify(data)
+    var array = [];
+    done = false;
+    while (!done) {
+      var i = data.indexOf(":");
+      var z = data.indexOf("}");
+      console.log(data, i, z);
+      var a = JSON.parse(data.substring(i+1, z+1));
+      data = data.substring(z+2, data.length);
+      console.log(data);
+      array.push(a);
+      if (!data.length) done = true;
+    }
+    return array;
+  }
   getRating(data) {
     let rating = 0, count = 0;
     for (; count < data.length; count++) {
@@ -69,10 +83,13 @@ export class ReviewLayoutScreen extends React.PureComponent {
         console.log(responseJson);
         //selected review are saved in responseJson.selReview
         this.setState({
-          data: responseJson,
+          data: this.objToArray(responseJson),
           loading: false,
-          rating: this.getRating(responseJson)
         })
+        this.setState({
+          rating: this.getRating(this.state.data)
+        })
+        console.log(this.state);
       })
       .catch((error) => {
         console.error(error);
@@ -81,7 +98,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
   addAReview() {
     console.log(this.props)
     const { openInModal, closeModal, article } = this.props;
-    
+
     const route = {
       screen: ext('AddAReviewScreen'),
       props: {
