@@ -7,10 +7,15 @@ import {
   Text,
   View,
   TextInput,
-} from 'react-native';
-import { Button } from '@shoutem/ui'
+  Dimensions
 
-export default class AddAReviewScreen extends Component {
+} from 'react-native';
+import { Button } from '@shoutem/ui';
+import { connectStyle } from '@shoutem/theme'
+import { ext } from '../const';
+import StarRating from 'react-native-star-rating'
+
+export class AddAReviewScreen extends Component {
   constructor(props) {
     super(props);
     console.log(this.props);
@@ -22,6 +27,7 @@ export default class AddAReviewScreen extends Component {
     this.addAReview = this.addAReview.bind(this)
   }
   addAReview() {
+    const { onClose } = this.props;
     console.log(this.state)
     fetch('https://gamereviewsapp.firebaseio.com/reviews/reviews/' + this.props.id + '.json?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk',
       {
@@ -41,19 +47,26 @@ export default class AddAReviewScreen extends Component {
       .then((responseJson) => {
         console.log(responseJson);
         console.log(this.state);
+        onClose();
       })
   }
   render() {
+    const styles = this.props.style;
+    console.log(this.props);
     return (
       <View style={styles.container}>
-        <TextInput editable onChangeText={(text) => this.setState({ review: text })} />
+        <TextInput style={styles.textInput} editable onChangeText={(text) => this.setState({ review: text })} numberOfLines={4} maxLength={140} multiline placeholder="Write a review (max. 140 characters)" placeholderTextColor="orange" />
+        <StarRating
+          rating={this.state.rating}
+          selectedStar={(rate) => this.setState({ rating: rate })}
+        />
         <Button onPress={this.addAReview}><Text>Add a review</Text></Button>
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -62,4 +75,9 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
   },
-});
+  textInput: {
+    width: Dimensions.get("window").width * 0.8
+  }
+};
+
+export default connectStyle(ext('AddAReviewScreen'), styles)(AddAReviewScreen)
