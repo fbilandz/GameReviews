@@ -60,8 +60,8 @@ export class ReviewLayoutScreen extends React.PureComponent {
       var i = data.indexOf(":");
       var z = data.indexOf("}");
       console.log(data, i, z);
-      var a = JSON.parse(data.substring(i+1, z+1));
-      data = data.substring(z+2, data.length);
+      var a = JSON.parse(data.substring(i + 1, z + 1));
+      data = data.substring(z + 2, data.length);
       console.log(data);
       array.push(a);
       if (!data.length) done = true;
@@ -175,15 +175,18 @@ export class ReviewLayoutScreen extends React.PureComponent {
                 starStyle={{ justifyContent: 'center' }}
                 starColor={'red'}
               />
-            <Title styleName="h-center">About</Title>
-            <Html body={article.body} />
+              <Title styleName="h-center">About</Title>
+              <Html body={article.body} />
             </View>
+            <Button styleName="full-width" onPress={this.addAReview}>
+              <Icon name="like" />
+              <Text>Add a Review</Text>
+            </Button>
             <Title styleName="h-center">Reviews</Title>
             <ListView
               data={data}
               renderRow={this.renderRow}
             />
-            <Button onPress={this.addAReview}><Text>Add a Review</Text></Button>
             {this.renderUpNext()}
           </View>
         </ScrollView>
