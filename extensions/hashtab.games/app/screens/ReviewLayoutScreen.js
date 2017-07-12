@@ -40,11 +40,9 @@ export class ReviewLayoutScreen extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      data: [
-        { "id": 1, "text": "najs", "username": "GGG" },
-      ],
+      data: [],
       loading: true,
-      rating: 2,
+      rating: 0,
     }
     console.log(this.props);
     this.renderRow = this.renderRow.bind(this);
