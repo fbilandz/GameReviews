@@ -148,8 +148,8 @@ export class ReviewLayoutScreen extends React.PureComponent {
             <Icon name="down-arrow" styleName="scroll-indicator" />
           </Image>
           <View styleName="solid">
-            <Html body={article.body} />
             <View styleName="solid h-center">
+              <Title styleName="h-center">Average rating:</Title>
               <StarRating
                 disable={true}
                 rating={this.state.rating}
@@ -158,6 +158,8 @@ export class ReviewLayoutScreen extends React.PureComponent {
                 starStyle={{ justifyContent: 'center' }}
                 starColor={'red'}
               />
+            <Title styleName="h-center">About</Title>
+            <Html body={article.body} />
             </View>
             <Title styleName="h-center">Reviews</Title>
             <ListView

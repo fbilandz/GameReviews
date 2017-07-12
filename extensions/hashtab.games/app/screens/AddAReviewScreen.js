@@ -8,7 +8,7 @@ import {
   View,
   TextInput,
 } from 'react-native';
-import { Button } from '@shoutem/ui'
+import { Button } from '@shoutem/ui';
 
 export default class AddAReviewScreen extends Component {
   constructor(props) {
