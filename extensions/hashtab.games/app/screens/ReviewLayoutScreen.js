@@ -1,5 +1,5 @@
 import React from 'react';
-import { connectStyle } from '@shoutem/theme';
+import { StyleProvider, connectStyle } from '@shoutem/theme';
 import {
   ScrollView,
   Screen,
@@ -11,13 +11,13 @@ import {
   Html,
   View,
 } from '@shoutem/ui';
-import { Text } from 'react-native'
+import { Text, StyleSheet } from 'react-native'
 import { NavigationBar } from '@shoutem/ui/navigation';
 import { loginRequired } from 'shoutem.auth';
 import { closeModal, openInModal } from '@shoutem/core/navigation';
 import * as _ from 'lodash';
 import moment from 'moment';
-import { ListView, Button } from '@shoutem/ui';
+import { ListView, Button, Divider } from '@shoutem/ui';
 import { ext } from '../const';
 import { NextArticle } from '../components/NextArticle';
 import { Review } from '../components/Review';
@@ -175,13 +175,17 @@ export class ReviewLayoutScreen extends React.PureComponent {
                 starStyle={{ justifyContent: 'center' }}
                 starColor={'red'}
               />
+              <Divider styleName="section-header" />
               <Title styleName="h-center">About</Title>
               <Html body={article.body} />
             </View>
-            <Button styleName="full-width" onPress={this.addAReview}>
-              <Icon name="like" />
-              <Text>Add a Review</Text>
-            </Button>
+            <Divider styleName="section-header" />
+            <View style={styles.button}>
+              <Button styleName="confirmation" onPress={this.addAReview}>
+                <Icon name="comment" />
+                <Text>Add a Review</Text>
+              </Button>
+            </View>
             <Title styleName="h-center">Reviews</Title>
             <ListView
               data={data}
@@ -210,3 +214,10 @@ export default loginRequired(
   connect(null, mapDispatchToProps)(connectStyle(ext('ReviewLayoutScreen'))(ReviewLayoutScreen))
 );
 
+const styles = StyleSheet.create({
+  button: {
+    flex: 1,
+    height: 70,
+    flexDirection: 'row',
+  }
+})
