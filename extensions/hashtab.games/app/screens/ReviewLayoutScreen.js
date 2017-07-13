@@ -51,7 +51,11 @@ export class ReviewLayoutScreen extends React.PureComponent {
     this.getReview();
   }
   objToArray(data) {
+<<<<<<< HEAD
     if(data == null || data == undefined) return 0; 
+=======
+    if (data == null || data == undefined) return null;
+>>>>>>> 752644f26b2b8b33edff642d6e91dd608085bb67
     data = JSON.stringify(data)
     var array = [];
     done = false;
@@ -68,6 +72,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     return array;
   }
   getRating(data) {
+    if(data === null) return 0;
     let rating = 0, count = 0;
     for (; count < data.length; count++) {
       rating += data[count].rating;
@@ -202,12 +207,13 @@ export class ReviewLayoutScreen extends React.PureComponent {
               <Text>Add a Review</Text>
             </Button>
             <Title styleName="h-center">Reviews</Title>
+            {
+              data !== null ? <ListView
+                data={data}
+                renderRow={this.renderRow}
+              /> : <Text>No reviews yet</Text>
+            }
 
-            <ListView
-              data={data}
-              renderRow={this.renderRow}
-            />
-            
             {this.renderUpNext()}
           </View>
         </ScrollView>
@@ -238,3 +244,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   }
 })
+
+
