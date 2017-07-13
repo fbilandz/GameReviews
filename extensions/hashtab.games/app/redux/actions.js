@@ -1,5 +1,6 @@
 import {
     ADD_REVIEWS,
+    ADD_REVIEW,
     REVIEWS_LOADING,
     REVIEWS_LOADED,
     REIVEWS_FETCH_ERROR
@@ -16,8 +17,9 @@ export function addReviews(reviews, id) {
 
 export function addAReview(review, name, id) {
     return {
-        type: ADD_REVIEWS,
-        payload: { [name]: review },
+        type: ADD_REVIEW,
+        payload: review,
+        name: name,
         id: id
     }
 }

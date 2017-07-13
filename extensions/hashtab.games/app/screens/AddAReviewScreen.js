@@ -30,7 +30,7 @@ export class AddAReviewScreen extends Component {
     this.addAReview = this.addAReview.bind(this)
   }
   addAReview() {
-    const { onClose, addAReview } = this.props;
+    const { onClose, addAReview, id } = this.props;
     console.log(this.state)
     fetch('https://gamereviewsapp.firebaseio.com/reviews/reviews/' + this.props.id + '.json?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk',
       {
@@ -51,7 +51,7 @@ export class AddAReviewScreen extends Component {
       .then((responseJson) => {
         console.log(responseJson);
         console.log(this.state);
-        addAReview({ rating: this.state.rating, text: this.state.review, username: this.props.user }, responseJson.name);
+        addAReview({ rating: this.state.rating, text: this.state.review, username: this.props.user }, responseJson.name, this.props.id);
         onClose();
       })
   }

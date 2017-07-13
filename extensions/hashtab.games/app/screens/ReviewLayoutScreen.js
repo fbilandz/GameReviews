@@ -119,7 +119,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
   addAReview(rating) {
     console.log(this.props)
     const { openInModal, closeModal, article } = this.props;
-
+    console.log(rating)
     const route = {
       screen: ext('AddAReviewScreen'),
       props: {
