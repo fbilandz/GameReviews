@@ -16,6 +16,7 @@ import { ext } from '../const';
 import StarRating from 'react-native-star-rating'
 import { connect } from 'react-redux';
 import { addAReview } from '../redux/actions';
+import moment from 'moment';
 
 export class AddAReviewScreen extends Component {
   constructor(props) {
@@ -42,6 +43,7 @@ export class AddAReviewScreen extends Component {
           username: this.props.user,
           text: this.state.review,
           rating: this.state.rating,
+          timeStamp: moment()
         })
       }
     )

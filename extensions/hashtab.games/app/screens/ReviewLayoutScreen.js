@@ -67,25 +67,12 @@ export class ReviewLayoutScreen extends React.PureComponent {
   }
 
   insertIntoReducer(data) {
-    const { addAReview } = this.props;
-    if (data == null || data == undefined) return null;
-    data = JSON.stringify(data)
-    done = false;
-    while (!done) {
-      var f = data.indexOf('"');
-      var l = data.indexOf('"', f + 1);
-      console.log(data.substring(f + 1, l));
-      var name = data.substring(f + 1, l);
-      var i = data.indexOf(":");
-      var z = data.indexOf("}");
-      console.log(data, i, z);
-      var a = JSON.parse(data.substring(i + 1, z + 1));
-      addAReview(a, name);
-      data = data.substring(z + 2, data.length);
-      console.log(data);
-      if (!data.length) done = true;
-    }
-    return;
+    const { addReviews } = this.props;
+    /*
+    Object.keys(data).map(function (dataKey, index) {
+      addAReview(data[dataKey], dataKey);
+    });*/
+    addReviews(data);
   }
 
   getReview() {
@@ -169,9 +156,6 @@ export class ReviewLayoutScreen extends React.PureComponent {
     const { article, reviews, loader } = this.props;
     const { data } = this.state;
     const articleImage = article.image ? { uri: _.get(article, 'image.url') } : undefined;
-    var array = []
-    //if (!this.state.loading)  array = this.objToArray(reviews);
-    console.log(this.props);
     return (
       <Screen styleName="full-screen paper">
         <NavigationBar
@@ -224,7 +208,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
             </Button>
             <Title styleName="h-center">Reviews</Title>
             {
-              (array !== null) || loader.isLoading ? <ListView
+              (reviews !== {}) || loader.isLoading ? <ListView
                 data={reviews}
                 renderRow={this.renderRow}
                 loading={loader.isLoading}
