@@ -18,7 +18,7 @@ import { closeModal, openInModal } from '@shoutem/core/navigation';
 import * as _ from 'lodash';
 import moment from 'moment';
 import { ListView, Button, Divider } from '@shoutem/ui';
-import { ext } from '../const';
+import { ext } from '../const';   
 import { NextArticle } from '../components/NextArticle';
 import { Review } from '../components/Review';
 import StarRating from 'react-native-star-rating';
@@ -51,6 +51,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     this.getReview();
   }
   objToArray(data) {
+    if(data == null || data == undefined) return 0; 
     data = JSON.stringify(data)
     var array = [];
     done = false;
