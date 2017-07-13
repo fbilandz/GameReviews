@@ -25,19 +25,16 @@ const loader = (state = {}, action) => {
     switch (action.type) {
         case REVIEWS_LOADING:
             return {
-                
                 isLoading: true,
             };
         case REVIEWS_LOADED:
             return {
-                
                 error: false,
                 isLoading: false,
 
             };
         case REIVEWS_FETCH_ERROR:
             return {
-                
                 error: true,
                 isLoading: false,
 
