@@ -16,18 +16,28 @@ const reviews = (state = {}, action) => {
                 ...state,
                 ...action.payload
             };
+        default:
+            return state;
+    }
+}
+
+const loader = (state = {}, action) => {
+    switch (action.type) {
         case REVIEWS_LOADING:
             return {
+                
                 isLoading: true,
             };
         case REVIEWS_LOADED:
             return {
+                
                 error: false,
                 isLoading: false,
 
             };
         case REIVEWS_FETCH_ERROR:
             return {
+                
                 error: true,
                 isLoading: false,
 
@@ -37,6 +47,4 @@ const reviews = (state = {}, action) => {
     }
 }
 
-
-
-export default preventStateRehydration(combineReducers({ reviews }));
+export default preventStateRehydration(combineReducers({ reviews, loader }));

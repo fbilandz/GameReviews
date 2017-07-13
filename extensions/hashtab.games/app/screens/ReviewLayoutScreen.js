@@ -91,7 +91,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
   getReview() {
     console.log(this.props);
     const { addReviews, reviewsLoading, reviewsFetchError, reviewsLoaded } = this.props;
-    //reviewsLoading();
+    reviewsLoading();
     fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk')
       .then((response) => response.json())
       .then((responseJson) => {
@@ -101,7 +101,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
         this.setState({
           loading: false,
         })
-        //reviewsLoaded();
+        reviewsLoaded();
         this.setState({
           rating: this.getRating(this.props.reviews)
         })
@@ -110,7 +110,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
       })
       .catch((error) => {
         reviewsFetchError();
-
+        console.log(error);
       });
   }
   addAReview() {
@@ -166,7 +166,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     return <Review data={data} />
   }
   render(rating) {
-    const { article, reviews } = this.props;
+    const { article, reviews, loader } = this.props;
     const { data } = this.state;
     const articleImage = article.image ? { uri: _.get(article, 'image.url') } : undefined;
     var array = []
@@ -224,10 +224,10 @@ export class ReviewLayoutScreen extends React.PureComponent {
             </Button>
             <Title styleName="h-center">Reviews</Title>
             {
-              (array !== null) || this.state.loading ? <ListView
+              (array !== null) || loader.isLoading ? <ListView
                 data={reviews}
                 renderRow={this.renderRow}
-                loading={this.state.loading}
+                loading={loader.isLoading}
               /> : <Text>No reviews yet</Text>
             }
 
@@ -250,9 +250,10 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = (state) => {
-  const { reviews } = state[ext()];
+  const { reviews, loader } = state[ext()];
   return {
-    reviews
+    reviews,
+    loader
   }
 }
 
