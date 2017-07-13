@@ -51,11 +51,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     this.getReview();
   }
   objToArray(data) {
-<<<<<<< HEAD
-    if(data == null || data == undefined) return 0; 
-=======
     if (data == null || data == undefined) return null;
->>>>>>> 752644f26b2b8b33edff642d6e91dd608085bb67
     data = JSON.stringify(data)
     var array = [];
     done = false;
