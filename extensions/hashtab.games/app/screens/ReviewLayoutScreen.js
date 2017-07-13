@@ -23,7 +23,7 @@ import { NextArticle } from '../components/NextArticle';
 import { Review } from '../components/Review';
 import StarRating from 'react-native-star-rating';
 import AddAReviewScreen from './AddAReviewScreen';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
 export class ReviewLayoutScreen extends React.PureComponent {
   static propTypes = {
@@ -109,7 +109,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     openInModal(route);
   }
 
-  addAReview(rating){
+  addAReview(rating) {
     console.log(this.props)
     const { openInModal, closeModal, article } = this.props;
 
@@ -200,10 +200,12 @@ export class ReviewLayoutScreen extends React.PureComponent {
               <Text>Add a Review</Text>
             </Button>
             <Title styleName="h-center">Reviews</Title>
+
             <ListView
               data={data}
               renderRow={this.renderRow}
             />
+            
             {this.renderUpNext()}
           </View>
         </ScrollView>
