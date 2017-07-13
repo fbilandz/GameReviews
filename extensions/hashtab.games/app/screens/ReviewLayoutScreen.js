@@ -24,7 +24,13 @@ import { Review } from '../components/Review';
 import StarRating from 'react-native-star-rating';
 import AddAReviewScreen from './AddAReviewScreen';
 import { connect } from 'react-redux'
-import { addReviews, addAReview } from '../redux/actions';
+import {
+  addReviews,
+  addAReview,
+  reviewsLoading,
+  reviewsLoaded,
+  reviewsFetchError
+} from '../redux/actions';
 
 export class ReviewLayoutScreen extends React.PureComponent {
   static propTypes = {
@@ -84,17 +90,18 @@ export class ReviewLayoutScreen extends React.PureComponent {
 
   getReview() {
     console.log(this.props);
-    const { addReviews } = this.props;
+    const { addReviews, reviewsLoading, reviewsFetchError, reviewsLoading } = this.props;
+    reviewsLoading();
     fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk')
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson);
         //selected review are saved in responseJson.selReview
-        this.insertIntoReducer(responseJson),
-          this.setState({
-            loading: false,
-          })
-
+        this.insertIntoReducer(responseJson);
+        this.setState({
+          loading: false,
+        })
+        reviewsLoaded();
         this.setState({
           rating: this.getRating(this.props.reviews)
         })
@@ -102,7 +109,8 @@ export class ReviewLayoutScreen extends React.PureComponent {
         //addReviews(this.state.data)
       })
       .catch((error) => {
-        console.error(error);
+        reviewsFetchError();
+        return error;
       });
   }
   addAReview() {
@@ -235,7 +243,10 @@ const mapDispatchToProps = {
   openInModal,
   closeModal,
   addReviews,
-  addAReview
+  addAReview,
+  reviewsLoaded,
+  reviewsFetchError,
+  reviewsLoading
 };
 
 const mapStateToProps = (state) => {
