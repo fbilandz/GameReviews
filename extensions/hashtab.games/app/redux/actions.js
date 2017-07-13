@@ -14,7 +14,7 @@ export function addReviews(reviews){
 
 export function reviewsLoading(){
     return {
-        type : REVIEWS_LOADING
+        type : REVIEWS_LOADING,
     }
 }
 

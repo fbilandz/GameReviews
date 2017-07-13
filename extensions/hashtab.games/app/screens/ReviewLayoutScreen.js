@@ -18,13 +18,18 @@ import { closeModal, openInModal } from '@shoutem/core/navigation';
 import * as _ from 'lodash';
 import moment from 'moment';
 import { ListView, Button, Divider } from '@shoutem/ui';
-import { ext } from '../const';   
+import { ext } from '../const';
 import { NextArticle } from '../components/NextArticle';
 import { Review } from '../components/Review';
 import StarRating from 'react-native-star-rating';
 import AddAReviewScreen from './AddAReviewScreen';
 import { connect } from 'react-redux'
-import { addReviews } from '../redux/actions';
+import {
+  addReviews,
+  reviewsLoading,
+  reviewsLoaded,
+  reviewsFetchError
+} from '../redux/actions';
 
 export class ReviewLayoutScreen extends React.PureComponent {
   static propTypes = {
@@ -51,6 +56,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     this.addAReview = this.addAReview.bind(this);
     this.getReview();
   }
+
   objToArray(data) {
     if (data == null || data == undefined) return null;
     data = JSON.stringify(data)
@@ -68,6 +74,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     }
     return array;
   }
+
   getRating(data) {
     if (data === null) return 0;
     let rating = 0, count = 0;
@@ -80,11 +87,14 @@ export class ReviewLayoutScreen extends React.PureComponent {
   getReview() {
     console.log(this.props);
     const { addReviews } = this.props;
-    fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk')
+    reviewsLoading();
+    fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk')  
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson);
+        reviewsLoaded(responseJson);webkitCancelAnimationFrame
         //selected review are saved in responseJson.selReview 
+        console.log(this.props);
         this.setState({
           data: this.objToArray(responseJson),
           loading: false,
@@ -93,10 +103,11 @@ export class ReviewLayoutScreen extends React.PureComponent {
           rating: this.getRating(this.state.data)
         })
         console.log(this.state);
-        addReviews(this.state.data)
+        addReviews(this.state.data);
       })
       .catch((error) => {
-        console.error(error);
+        reviewsFetchError();
+        return error;
       });
   }
   addAReview() {

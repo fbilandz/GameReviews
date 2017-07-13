@@ -16,7 +16,6 @@ const reviews = (state = {}, action) => {
             };
         case REVIEWS_LOADING:
             return {
-                ...state,
                 isLoading : true,
             };
         case REVIEWS_LOADED:
