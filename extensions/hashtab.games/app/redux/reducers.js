@@ -10,11 +10,14 @@ import {
 import { preventStateRehydration } from '@shoutem/core/preventStateRehydration';
 
 const reviews = (state = {}, action) => {
+    const id = action.id;
+    const payload = action.payload;
+    console.log(state, action);
     switch (action.type) {
         case ADD_REVIEWS:
             return {
                 ...state,
-                ...action.payload
+                [id]: payload
             };
         default:
             return state;

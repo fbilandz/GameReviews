@@ -11,7 +11,7 @@ import {
   Html,
   View,
 } from '@shoutem/ui';
-import { Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet, ActivityIndicator } from 'react-native'
 import { NavigationBar } from '@shoutem/ui/navigation';
 import { loginRequired } from 'shoutem.auth';
 import { closeModal, openInModal } from '@shoutem/core/navigation';
@@ -57,7 +57,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     this.getReview();
   }
   getRating(data) {
-    if (data === null) return 0;
+    if (data === null || data === undefined) return 0;
     let rating = 0, count = 0;
     Object.keys(data).map(function (dataKey, index) {
       rating += data[dataKey].rating;
@@ -67,12 +67,12 @@ export class ReviewLayoutScreen extends React.PureComponent {
   }
 
   insertIntoReducer(data) {
-    const { addReviews } = this.props;
+    const { addReviews, article } = this.props;
     /*
     Object.keys(data).map(function (dataKey, index) {
       addAReview(data[dataKey], dataKey);
     });*/
-    addReviews(data);
+    addReviews(data, article.id);
   }
 
   getReview() {
@@ -90,7 +90,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
         })
         reviewsLoaded();
         this.setState({
-          rating: this.getRating(this.props.reviews)
+          rating: this.getRating(this.props.reviews[this.props.article.id])
         })
         console.log(this.state);
         //addReviews(this.state.data)
@@ -208,11 +208,11 @@ export class ReviewLayoutScreen extends React.PureComponent {
             </Button>
             <Title styleName="h-center">Reviews</Title>
             {
-              (reviews !== {}) || loader.isLoading ? <ListView
-                data={reviews}
+              (reviews !== undefined && reviews[article.id] !== undefined) ? <ListView
+                data={reviews[article.id]}
                 renderRow={this.renderRow}
                 loading={loader.isLoading}
-              /> : <Text>No reviews yet</Text>
+              /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
             }
 
             {this.renderUpNext()}

@@ -5,34 +5,37 @@ import {
     REIVEWS_FETCH_ERROR
 } from './types';
 
-export function addReviews(reviews) {
+export function addReviews(reviews, id) {
+    console.log(reviews, id);
     return {
         type: ADD_REVIEWS,
         payload: reviews,
+        id: id,
     };
 }
 
-export function addAReview(review, name) {
+export function addAReview(review, name, id) {
     return {
         type: ADD_REVIEWS,
         payload: { [name]: review },
+        id: id
     }
 }
-export function reviewsLoading(){
+export function reviewsLoading() {
     return {
-        type : REVIEWS_LOADING,
-    }
-}
-
-export function reviewsLoaded(reviews){
-    return {
-        type : REVIEWS_LOADED,
-        payload: reviews,
+        type: REVIEWS_LOADING,
     }
 }
 
-export function reviewsFetchError(){
+export function reviewsLoaded() {
     return {
-        type : REIVEWS_FETCH_ERROR,
+        type: REVIEWS_LOADED,
+
+    }
+}
+
+export function reviewsFetchError() {
+    return {
+        type: REIVEWS_FETCH_ERROR,
     }
 }
