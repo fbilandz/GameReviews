@@ -191,10 +191,11 @@ export class ReviewLayoutScreen extends React.PureComponent {
                 starColor={'red'}
                 selectedStar={(star) => this.addAReview(star)}
               />
-              <Divider styleName="section-header" />
+              <Divider styleName="line" />
               <Title styleName="h-center">About</Title>
               <Html body={article.body} />
             </View>
+            <Divider styleName="line" />
             <Button onPress={this.addAReview}>
               <Icon name="like" />
               <Text>Add a Review</Text>
