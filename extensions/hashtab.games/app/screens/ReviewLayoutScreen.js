@@ -84,7 +84,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson);
-        //selected review are saved in responseJson.selReview
+        //selected review are saved in responseJson.selReview 
         this.setState({
           data: this.objToArray(responseJson),
           loading: false,

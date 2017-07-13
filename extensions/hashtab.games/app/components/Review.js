@@ -17,7 +17,6 @@ export class Review extends Component {
 
     }
 
-
     render() {
         console.log(this.props);
         return (
