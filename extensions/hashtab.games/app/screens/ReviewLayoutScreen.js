@@ -92,7 +92,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson);
-        reviewsLoaded(responseJson);webkitCancelAnimationFrame
+        reviewsLoaded(responseJson);
         //selected review are saved in responseJson.selReview 
         console.log(this.props);
         this.setState({
