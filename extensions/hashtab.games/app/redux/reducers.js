@@ -1,18 +1,19 @@
 import { combineReducers } from 'redux';
 import { ADD_REVIEWS } from './types';
+import { preventStateRehydration } from '@shoutem/core/preventStateRehydration';
 
 const reviews = (state = {}, action) => {
     switch (action.type) {
         case ADD_REVIEWS:
             return {
                 ...state,
-                ...action.payload,
+                ...action.payload
             };
-        default: 
+        default:
             return state;
     }
 }
 
 
 
-export default combineReducers({reviews});
+export default preventStateRehydration(combineReducers({ reviews }));

@@ -14,6 +14,8 @@ import { Button } from '@shoutem/ui';
 import { connectStyle } from '@shoutem/theme'
 import { ext } from '../const';
 import StarRating from 'react-native-star-rating'
+import { connect } from 'react-redux';
+import { addAReview } from '../redux/actions';
 
 export class AddAReviewScreen extends Component {
   constructor(props) {
@@ -27,7 +29,7 @@ export class AddAReviewScreen extends Component {
     this.addAReview = this.addAReview.bind(this)
   }
   addAReview() {
-    const { onClose } = this.props;
+    const { onClose, addAReview } = this.props;
     console.log(this.state)
     fetch('https://gamereviewsapp.firebaseio.com/reviews/reviews/' + this.props.id + '.json?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk',
       {
@@ -47,6 +49,7 @@ export class AddAReviewScreen extends Component {
       .then((responseJson) => {
         console.log(responseJson);
         console.log(this.state);
+        addAReview({ rating: this.state.rating, text: this.state.review, username: this.props.user }, responseJson.name);
         onClose();
       })
   }
@@ -80,5 +83,8 @@ const styles = {
     width: Dimensions.get("window").width * 0.8
   }
 };
+const mapDispatchToProps = {
+  addAReview
+}
 
-export default connectStyle(ext('AddAReviewScreen'), styles)(AddAReviewScreen)
+export default connect(null, mapDispatchToProps)(connectStyle(ext('AddAReviewScreen'), styles)(AddAReviewScreen));

@@ -10,6 +10,7 @@ import {
 import { StyleProvider, connectStyle } from '@shoutem/theme';
 import StarRating from 'react-native-star-rating';
 import {ext} from '../const';
+
 export class Review extends Component {
     constructor(props) {
         super(props);

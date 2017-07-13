@@ -24,7 +24,7 @@ import { Review } from '../components/Review';
 import StarRating from 'react-native-star-rating';
 import AddAReviewScreen from './AddAReviewScreen';
 import { connect } from 'react-redux'
-import { addReviews } from '../redux/actions';
+import { addReviews, addAReview } from '../redux/actions';
 
 export class ReviewLayoutScreen extends React.PureComponent {
   static propTypes = {
@@ -41,7 +41,6 @@ export class ReviewLayoutScreen extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       loading: true,
       rating: 0,
     }
@@ -51,30 +50,36 @@ export class ReviewLayoutScreen extends React.PureComponent {
     this.addAReview = this.addAReview.bind(this);
     this.getReview();
   }
-  objToArray(data) {
+  getRating(data) {
+    if (data === null) return 0;
+    let rating = 0, count = 0;
+    Object.keys(data).map(function (dataKey, index) {
+      rating += data[dataKey].rating;
+      count++;
+    });
+    return rating / (count);
+  }
+
+  insertIntoReducer(data) {
+    const { addAReview } = this.props;
     if (data == null || data == undefined) return null;
     data = JSON.stringify(data)
-    var array = [];
     done = false;
     while (!done) {
+      var f = data.indexOf('"');
+      var l = data.indexOf('"', f + 1);
+      console.log(data.substring(f + 1, l));
+      var name = data.substring(f + 1, l);
       var i = data.indexOf(":");
       var z = data.indexOf("}");
       console.log(data, i, z);
       var a = JSON.parse(data.substring(i + 1, z + 1));
+      addAReview(a, name);
       data = data.substring(z + 2, data.length);
       console.log(data);
-      array.push(a);
       if (!data.length) done = true;
     }
-    return array;
-  }
-  getRating(data) {
-    if (data === null) return 0;
-    let rating = 0, count = 0;
-    for (; count < data.length; count++) {
-      rating += data[count].rating;
-    }
-    return rating / (count);
+    return;
   }
 
   getReview() {
@@ -85,15 +90,16 @@ export class ReviewLayoutScreen extends React.PureComponent {
       .then((responseJson) => {
         console.log(responseJson);
         //selected review are saved in responseJson.selReview
+        this.insertIntoReducer(responseJson),
+          this.setState({
+            loading: false,
+          })
+
         this.setState({
-          data: this.objToArray(responseJson),
-          loading: false,
-        })
-        this.setState({
-          rating: this.getRating(this.state.data)
+          rating: this.getRating(this.props.reviews)
         })
         console.log(this.state);
-        addReviews(this.state.data)
+        //addReviews(this.state.data)
       })
       .catch((error) => {
         console.error(error);
@@ -155,6 +161,8 @@ export class ReviewLayoutScreen extends React.PureComponent {
     const { article, reviews } = this.props;
     const { data } = this.state;
     const articleImage = article.image ? { uri: _.get(article, 'image.url') } : undefined;
+    var array = []
+    //if (!this.state.loading)  array = this.objToArray(reviews);
     console.log(this.props);
     return (
       <Screen styleName="full-screen paper">
@@ -208,9 +216,10 @@ export class ReviewLayoutScreen extends React.PureComponent {
             </Button>
             <Title styleName="h-center">Reviews</Title>
             {
-              data !== null ? <ListView
-                data={data}
+              (array !== null) || this.state.loading ? <ListView
+                data={reviews}
                 renderRow={this.renderRow}
+                loading={this.state.loading}
               /> : <Text>No reviews yet</Text>
             }
 
@@ -225,7 +234,8 @@ export class ReviewLayoutScreen extends React.PureComponent {
 const mapDispatchToProps = {
   openInModal,
   closeModal,
-  addReviews
+  addReviews,
+  addAReview
 };
 
 const mapStateToProps = (state) => {
