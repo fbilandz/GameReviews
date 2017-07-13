@@ -13,25 +13,24 @@ const reviews = (state = {}, action) => {
     switch (action.type) {
         case ADD_REVIEWS:
             return {
-                error : false,
                 ...state,
                 ...action.payload
             };
         case REVIEWS_LOADING:
             return {
-                isLoading : true,
+                isLoading: true,
             };
         case REVIEWS_LOADED:
             return {
-                error : false,
-                isLoading : false,
-                ...action.payload,
+                error: false,
+                isLoading: false,
+
             };
-        case REIVEWS_FETCH_ERROR: 
+        case REIVEWS_FETCH_ERROR:
             return {
-                error : true,
-                isLoading : false,
-                ...action.payload,
+                error: true,
+                isLoading: false,
+
             };
         default:
             return state;

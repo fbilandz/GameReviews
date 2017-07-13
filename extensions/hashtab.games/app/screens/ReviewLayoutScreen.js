@@ -90,8 +90,8 @@ export class ReviewLayoutScreen extends React.PureComponent {
 
   getReview() {
     console.log(this.props);
-    const { addReviews, reviewsLoading, reviewsFetchError, reviewsLoading } = this.props;
-    reviewsLoading();
+    const { addReviews, reviewsLoading, reviewsFetchError, reviewsLoaded } = this.props;
+    //reviewsLoading();
     fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk')
       .then((response) => response.json())
       .then((responseJson) => {
@@ -101,7 +101,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
         this.setState({
           loading: false,
         })
-        reviewsLoaded();
+        //reviewsLoaded();
         this.setState({
           rating: this.getRating(this.props.reviews)
         })
@@ -110,7 +110,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
       })
       .catch((error) => {
         reviewsFetchError();
-        return error;
+
       });
   }
   addAReview() {
