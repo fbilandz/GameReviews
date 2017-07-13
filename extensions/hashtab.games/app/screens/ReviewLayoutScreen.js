@@ -24,6 +24,7 @@ import { Review } from '../components/Review';
 import StarRating from 'react-native-star-rating';
 import AddAReviewScreen from './AddAReviewScreen';
 import { connect } from 'react-redux'
+import { addReviews } from '../redux/actions';
 
 export class ReviewLayoutScreen extends React.PureComponent {
   static propTypes = {
@@ -68,7 +69,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     return array;
   }
   getRating(data) {
-    if(data === null) return 0;
+    if (data === null) return 0;
     let rating = 0, count = 0;
     for (; count < data.length; count++) {
       rating += data[count].rating;
@@ -77,6 +78,8 @@ export class ReviewLayoutScreen extends React.PureComponent {
   }
 
   getReview() {
+    console.log(this.props);
+    const { addReviews } = this.props;
     fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk')
       .then((response) => response.json())
       .then((responseJson) => {
@@ -90,6 +93,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
           rating: this.getRating(this.state.data)
         })
         console.log(this.state);
+        addReviews(this.state.data)
       })
       .catch((error) => {
         console.error(error);
@@ -148,7 +152,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     return <Review data={data} />
   }
   render(rating) {
-    const { article } = this.props;
+    const { article, reviews } = this.props;
     const { data } = this.state;
     const articleImage = article.image ? { uri: _.get(article, 'image.url') } : undefined;
     console.log(this.props);
@@ -221,16 +225,18 @@ export class ReviewLayoutScreen extends React.PureComponent {
 const mapDispatchToProps = {
   openInModal,
   closeModal,
+  addReviews
 };
 
 const mapStateToProps = (state) => {
+  const { reviews } = state[ext()];
   return {
-    state
+    reviews
   }
 }
 
 export default loginRequired(
-  connect(null, mapDispatchToProps)(connectStyle(ext('ReviewLayoutScreen'))(ReviewLayoutScreen))
+  connect(mapStateToProps, mapDispatchToProps)(connectStyle(ext('ReviewLayoutScreen'))(ReviewLayoutScreen))
 );
 
 const styles = StyleSheet.create({
