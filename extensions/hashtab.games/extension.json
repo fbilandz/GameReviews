@@ -7,10 +7,16 @@
   "screens": [
     {
       "name": "ReviewLayoutScreen",
-      "extends": "shoutem.news.ArticleDetailsScreen"
+      "extends": "shoutem.news.ArticleDetailsScreen",
+      "navigatesTo": [
+        "@.ReviewListScreen"
+      ]
     },
     {
       "name": "AddAReviewScreen"
+    },
+    {
+      "name": "ReviewListScreen"
     }
   ]
 }

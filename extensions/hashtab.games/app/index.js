@@ -9,5 +9,5 @@ const screens = extension.screens;
 export {
     screens,
     actions,
-    reducer
-}
+    reducer,
+};

@@ -1,24 +1,26 @@
 import { combineReducers } from 'redux';
-
 import {
     ADD_REVIEWS,
     ADD_REVIEW,
     REVIEWS_LOADING,
     REVIEWS_LOADED,
-    REIVEWS_FETCH_ERROR
+    REIVEWS_FETCH_ERROR,
 } from './types';
 
 import { preventStateRehydration } from '@shoutem/core/preventStateRehydration';
 
 const reviews = (state = {}, action) => {
-    let id = action.id;
+    const id = action.id;
     const payload = action.payload;
     console.log(state, action);
     switch (action.type) {
         case ADD_REVIEWS:
+            //var s = state[id] !== undefined ? state[id] + payload : payload
+            const f = Object.assign(state[id] === undefined ? {} : state[id], payload)
+            console.log(f);
             return {
                 ...state,
-                [id]: payload
+                [id]: { ...f },
             };
         case ADD_REVIEW:
             return {
@@ -31,7 +33,7 @@ const reviews = (state = {}, action) => {
         default:
             return state;
     }
-}
+};
 
 const loader = (state = {}, action) => {
     switch (action.type) {
@@ -54,6 +56,6 @@ const loader = (state = {}, action) => {
         default:
             return state;
     }
-}
+};
 
 export default preventStateRehydration(combineReducers({ reviews, loader }));

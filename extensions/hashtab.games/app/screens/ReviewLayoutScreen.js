@@ -10,26 +10,28 @@ import {
   Tile,
   Html,
   View,
+  ListView,
+  Button,
+  Divider,
 } from '@shoutem/ui';
-import { Text, StyleSheet, ActivityIndicator } from 'react-native'
+import { Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { NavigationBar } from '@shoutem/ui/navigation';
 import { loginRequired } from 'shoutem.auth';
-import { closeModal, openInModal } from '@shoutem/core/navigation';
+import { closeModal, openInModal, navigateTo } from '@shoutem/core/navigation';
 import * as _ from 'lodash';
 import moment from 'moment';
-import { ListView, Button, Divider } from '@shoutem/ui';
 import { ext } from '../const';
 import { NextArticle } from '../components/NextArticle';
 import { Review } from '../components/Review';
 import StarRating from 'react-native-star-rating';
 import AddAReviewScreen from './AddAReviewScreen';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import {
   addReviews,
   addAReview,
   reviewsLoading,
   reviewsLoaded,
-  reviewsFetchError
+  reviewsFetchError,
 } from '../redux/actions';
 
 export class ReviewLayoutScreen extends React.PureComponent {
@@ -49,16 +51,31 @@ export class ReviewLayoutScreen extends React.PureComponent {
     this.state = {
       loading: true,
       rating: 0,
-    }
+    };
     console.log(this.props);
     this.renderRow = this.renderRow.bind(this);
     this.getReview = this.getReview.bind(this);
     this.addAReview = this.addAReview.bind(this);
+    this.getMoreReviews = this.getMoreReviews.bind(this);
+    this.openListScreen = this.openListScreen.bind(this);
     this.getReview();
+  }
+  openListScreen(id) {
+    const { navigateTo, article } = this.props;
+    const route = {
+      screen: ext('ReviewListScreen'),
+      title: article.title,
+      props: {
+        article,
+        id,
+      },
+    };
+    navigateTo(route);
   }
   getRating(data) {
     if (data === null || data === undefined) return 0;
-    let rating = 0, count = 0;
+    let rating = 0;
+    let count = 0;
     Object.keys(data).map(function (dataKey, index) {
       rating += data[dataKey].rating;
       count++;
@@ -74,26 +91,49 @@ export class ReviewLayoutScreen extends React.PureComponent {
     });*/
     addReviews(data, article.id);
   }
-
+  getMoreReviews() {
+    const { addReviews, reviewsLoading, reviewsFetchError, reviewsLoaded } = this.props;
+    reviewsLoading();
+    fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk' + '&orderBy=%22username%22&limitToFirst=5&print=pretty%27')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+        //  selected review are saved in responseJson.selReview
+        this.insertIntoReducer(responseJson);
+        this.setState({
+          loading: false,
+        });
+        reviewsLoaded();
+        this.setState({
+          rating: this.getRating(this.props.reviews[this.props.article.id])
+        });
+        console.log(this.state);
+        //  addReviews(this.state.data)
+      })
+      .catch((error) => {
+        reviewsFetchError();
+        console.log(error);
+      });
+  }
   getReview() {
     console.log(this.props);
     const { addReviews, reviewsLoading, reviewsFetchError, reviewsLoaded } = this.props;
     reviewsLoading();
-    fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk')
+    fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk' + '&orderBy=%22timestamp%22&limitToLast=5&print=pretty%27')
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson);
-        //selected review are saved in responseJson.selReview
+        //  selected review are saved in responseJson.selReview
         this.insertIntoReducer(responseJson);
         this.setState({
           loading: false,
-        })
+        });
         reviewsLoaded();
         this.setState({
           rating: this.getRating(this.props.reviews[this.props.article.id])
-        })
+        });
         console.log(this.state);
-        //addReviews(this.state.data)
+        //  addReviews(this.state.data)
       })
       .catch((error) => {
         reviewsFetchError();
@@ -117,23 +157,21 @@ export class ReviewLayoutScreen extends React.PureComponent {
   }
 
   addAReview(rating) {
-    console.log(this.props)
+    console.log(this.props);
     const { openInModal, closeModal, article } = this.props;
     console.log(rating)
     const route = {
       screen: ext('AddAReviewScreen'),
       props: {
-        user: "Billy",
+        user: 'Billy',
         id: article.id,
         onClose: closeModal,
-        rating: rating,
+        rating,
       },
     };
 
     openInModal(route);
   }
-
-
 
   renderUpNext() {
     const { nextArticle, openArticle } = this.props;
@@ -150,12 +188,13 @@ export class ReviewLayoutScreen extends React.PureComponent {
     return null;
   }
   renderRow(data, rowId) {
-    return <Review data={data} />
+    return <Review data={data} key={rowId} />;
   }
   render(rating) {
     const { article, reviews, loader } = this.props;
-    const { data } = this.state;
+    //  const { data } = this.state;
     const articleImage = article.image ? { uri: _.get(article, 'image.url') } : undefined;
+    console.log(reviews);
     return (
       <Screen styleName="full-screen paper">
         <NavigationBar
@@ -189,7 +228,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
             <View styleName="solid h-center">
               <Title styleName="h-center">Average rating:</Title>
               <StarRating
-                disable={true}
+                disable
                 rating={this.state.rating}
                 maxStars={10}
                 starSize={25}
@@ -208,15 +247,20 @@ export class ReviewLayoutScreen extends React.PureComponent {
             </Button>
             <Title styleName="h-center">Reviews</Title>
             {
-              (reviews !== undefined && reviews[article.id] !== undefined) ? <ListView
-                data={reviews[article.id]}
-                renderRow={this.renderRow}
-                loading={loader.isLoading}
-              /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
+              (reviews !== undefined && reviews[article.id] !== undefined && reviews !== null && reviews[article.id] !== null) ?
+                <ListView
+                  data={reviews[article.id]}
+                  renderRow={this.renderRow}
+                  loading={loader.isLoading}
+                  //  onLoadMore={this.getMoreReviews}
+                /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
             }
-
-            {this.renderUpNext()}
+            <Button onPress={() => this.openListScreen(article.id)}>
+              <Icon name="like" />
+              <Text>Load more content</Text>
+            </Button>
           </View>
+          {this.renderUpNext()}
         </ScrollView>
       </Screen>
     );
@@ -230,19 +274,22 @@ const mapDispatchToProps = {
   addAReview,
   reviewsLoaded,
   reviewsFetchError,
-  reviewsLoading
+  reviewsLoading,
+  navigateTo,
 };
 
 const mapStateToProps = (state) => {
   const { reviews, loader } = state[ext()];
   return {
     reviews,
-    loader
-  }
-}
+    loader,
+  };
+};
 
 export default loginRequired(
-  connect(mapStateToProps, mapDispatchToProps)(connectStyle(ext('ReviewLayoutScreen'))(ReviewLayoutScreen))
+  connect(mapStateToProps, mapDispatchToProps)(
+    connectStyle(ext('ReviewLayoutScreen')
+    )(ReviewLayoutScreen))
 );
 
 const styles = StyleSheet.create({
@@ -250,7 +297,5 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 70,
     flexDirection: 'row',
-  }
-})
-
-
+  },
+});
