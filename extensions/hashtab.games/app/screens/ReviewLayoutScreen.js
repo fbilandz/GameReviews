@@ -32,6 +32,7 @@ import {
   reviewsLoading,
   reviewsLoaded,
   reviewsFetchError,
+  mapReviews,
 } from '../redux/actions';
 
 export class ReviewLayoutScreen extends React.PureComponent {
@@ -58,6 +59,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     this.addAReview = this.addAReview.bind(this);
     // this.getMoreReviews = this.getMoreReviews.bind(this);
     this.openListScreen = this.openListScreen.bind(this);
+    this.mapToMap = this.mapToMap.bind(this);
     this.getReview();
   }
   openListScreen(id) {
@@ -93,9 +95,9 @@ export class ReviewLayoutScreen extends React.PureComponent {
   }
   getReview() {
     console.log(this.props);
-    const { addReviews, reviewsLoading, reviewsFetchError, reviewsLoaded } = this.props;
+    const { addReviews, reviewsLoading, reviewsFetchError, reviewsLoaded, mapReviews, reviews, article } = this.props;
     reviewsLoading();
-    fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk' + '&orderBy=%22timestamp%22&limitToLast=5&print=pretty%27')
+    fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk')
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson);
@@ -106,9 +108,10 @@ export class ReviewLayoutScreen extends React.PureComponent {
         });
         reviewsLoaded();
         this.setState({
-          rating: this.getRating(this.props.reviews[this.props.article.id])
+          rating: this.getRating(this.props.reviews[this.props.article.id]),
         });
-        console.log(this.state);
+        this.mapToMap();
+        //  addFirst(x, this.props.article.id);
         //  addReviews(this.state.data)
       })
       .catch((error) => {
@@ -116,8 +119,21 @@ export class ReviewLayoutScreen extends React.PureComponent {
         console.log(error);
       });
   }
+  mapToMap() {
+    const { mapReviews, reviews, article } = this.props;
+    console.log(reviews);
+    var newObj = {}, found = true, i = 0;
+    Object.keys(reviews[article.id]).map(function (dataKey, index) {
+      if (i === 5) found = false;
+      if (found) {
+        newObj[dataKey] = reviews[article.id][dataKey];
+        i++;
+      }
+    });
+    mapReviews(newObj, article.id);
+  }
   addAReview() {
-    console.log(this.props)
+    console.log(this.props);
     const { openInModal, closeModal, article } = this.props;
 
     const route = {
@@ -135,7 +151,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
   addAReview(rating) {
     console.log(this.props);
     const { openInModal, closeModal, article } = this.props;
-    console.log(rating)
+    console.log(rating);
     const route = {
       screen: ext('AddAReviewScreen'),
       props: {
@@ -167,10 +183,10 @@ export class ReviewLayoutScreen extends React.PureComponent {
     return <Review data={data} key={rowId} />;
   }
   render(rating) {
-    const { article, reviews, loader } = this.props;
+    const { article, map, loader } = this.props;
     //  const { data } = this.state;
     const articleImage = article.image ? { uri: _.get(article, 'image.url') } : undefined;
-    console.log(reviews);
+    console.log(map);
     return (
       <Screen styleName="full-screen paper">
         <NavigationBar
@@ -223,12 +239,12 @@ export class ReviewLayoutScreen extends React.PureComponent {
             </Button>
             <Title styleName="h-center">Reviews</Title>
             {
-              (reviews !== undefined && reviews[article.id] !== undefined && reviews !== null && reviews[article.id] !== null) ?
+              (map !== undefined && map[article.id] !== undefined && map !== null && map[article.id] !== null) ?
                 <ListView
-                  data={reviews[article.id]}
+                  data={map[article.id]}
                   renderRow={this.renderRow}
                   loading={loader.isLoading}
-                  //  onLoadMore={this.getMoreReviews}
+                //  onLoadMore={this.getMoreReviews}
                 /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
             }
             <Button onPress={() => this.openListScreen(article.id)}>
@@ -252,13 +268,15 @@ const mapDispatchToProps = {
   reviewsFetchError,
   reviewsLoading,
   navigateTo,
+  mapReviews,
 };
 
 const mapStateToProps = (state) => {
-  const { reviews, loader } = state[ext()];
+  const { reviews, loader, map } = state[ext()];
   return {
     reviews,
     loader,
+    map,
   };
 };
 

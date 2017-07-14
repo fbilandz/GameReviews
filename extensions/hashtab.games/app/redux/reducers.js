@@ -5,6 +5,7 @@ import {
     REVIEWS_LOADING,
     REVIEWS_LOADED,
     REIVEWS_FETCH_ERROR,
+    MAP_REVIEWS,
 } from './types';
 
 import { preventStateRehydration } from '@shoutem/core/preventStateRehydration';
@@ -58,4 +59,20 @@ const loader = (state = {}, action) => {
     }
 };
 
-export default preventStateRehydration(combineReducers({ reviews, loader }));
+const map = (state = {}, action) => {
+    const id = action.id;
+    const payload = action.payload;
+    switch (action.type) {
+        case MAP_REVIEWS:
+            const f = Object.assign(state[id] === undefined ? {} : state[id], payload);
+            return {
+                ...state,
+                [action.id]: { ...f },
+            };
+        default:
+            return state
+    }
+};
+
+
+export default preventStateRehydration(combineReducers({ reviews, loader, map }));

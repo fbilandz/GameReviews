@@ -14,6 +14,7 @@ import {
     reviewsLoading,
     reviewsLoaded,
     reviewsFetchError,
+    mapReviews,
 } from '../redux/actions';
 import { ext } from '../const';
 
@@ -27,43 +28,45 @@ export class ReviewListScreen extends Component {
         this.getMoreReviews();
     }
     insertIntoReducer(data) {
-        const { addReviews, article } = this.props;
+        //const { addReviews, article } = this.props;
         /*
         Object.keys(data).map(function (dataKey, index) {
           addAReview(data[dataKey], dataKey);
         });*/
-        addReviews(data, article.id);
+        //Reviews(data, article.id);
     }
     getMoreReviews() {
-        const { addReviews, reviewsLoading, reviewsFetchError, reviewsLoaded } = this.props;
-        reviewsLoading();
-        fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk' + '&orderBy=%22username%22&limitToFirst=5&print=pretty%27')
-            .then((response) => response.json())
-            .then((responseJson) => {
-                console.log(responseJson);
-                //  selected review are saved in responseJson.selReview
-                this.insertIntoReducer(responseJson);
-                this.setState({
-                    loading: false,
-                });
-                reviewsLoaded();
-                console.log(this.state);
-                //  addReviews(this.state.data)
-            })
-            .catch((error) => {
-                reviewsFetchError();
-                console.log(error);
-            });
+        const { mapReviews, article, reviews, map } = this.props;
+        console.log(reviews);
+        const keys = Object.keys(map[article.id]);
+        console.log(keys)
+        var newObj = {}, found = true, i = 0;
+        Object.keys(reviews[article.id]).map(function (dataKey, index) {
+            if (i === 5) found = false;
+            if (found) {
+                newObj[dataKey] = reviews[article.id][dataKey];
+                i++;
+            }
+            var ind = 0;
+            console.log(dataKey);
+            for (; ind < keys.length; ind++) {
+                if (keys[ind] == dataKey.toString()) break;
+            }
+            if (ind !== keys.length) i--;
+        });
+        console.log(newObj)
+        mapReviews(newObj, article.id);
+
     }
     renderRow(data, rowId) {
         return <Review data={data} key={rowId} />;
     }
     render() {
-        const { reviews, id, loader } = this.props;
+        const { map, id, loader } = this.props;
         return (
-            (reviews !== undefined && reviews[id] !== undefined && reviews !== null && reviews[id] !== null) ?
+            (map !== undefined && map[id] !== undefined && map !== null && map[id] !== null) ?
                 <ListView
-                    data={reviews[id]}
+                    data={map[id]}
                     renderRow={this.renderRow}
                     loading={loader.isLoading}
                 //  onLoadMore={this.getMoreReviews}
@@ -73,10 +76,11 @@ export class ReviewListScreen extends Component {
 }
 
 const mapStateToProps = (state) => {
-    const { reviews, loader } = state[ext()];
+    const { reviews, loader, map } = state[ext()];
     return {
         reviews,
         loader,
+        map,
     };
 };
 
@@ -88,6 +92,7 @@ const mapDispatchToProps = {
     reviewsLoaded,
     reviewsFetchError,
     reviewsLoading,
+    mapReviews,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReviewListScreen);
