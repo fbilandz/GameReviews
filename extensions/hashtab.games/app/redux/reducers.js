@@ -6,6 +6,7 @@ import {
     REVIEWS_LOADED,
     REIVEWS_FETCH_ERROR,
     MAP_REVIEWS,
+    MAP_REVIEW,
 } from './types';
 
 import { preventStateRehydration } from '@shoutem/core/preventStateRehydration';
@@ -68,6 +69,15 @@ const map = (state = {}, action) => {
             return {
                 ...state,
                 [action.id]: { ...f },
+            };
+        case ADD_REVIEW:
+            // const f = Object.assign(state[id] === undefined ? {} : state[id], payload);
+            return {
+                ...state,
+                [action.id]: { 
+                    ...state[id],
+                    [action.name]: action.payload,
+                 },
             };
         default:
             return state

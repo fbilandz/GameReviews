@@ -5,3 +5,4 @@ export const REVIEWS_LOADED = 'hashtab.games.REVIEWS_LOADED';
 export const REVIEWS_FETCH_ERROR = 'hashtab.games.REVIEWS_FETCH_ERROR';
 export const ADD_REVIEW = 'hashtab.games.ADD_REVIEW';
 export const MAP_REVIEWS = 'hashtab.games.MAP_REVIEWS';
+export const MAP_REVIEW = 'hashtab.games.MAP_REVIEW';

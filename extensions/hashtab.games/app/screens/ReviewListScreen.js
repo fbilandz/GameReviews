@@ -25,6 +25,7 @@ export class ReviewListScreen extends Component {
             props,
         }
         this.getMoreReviews = this.getMoreReviews.bind(this);
+        this.noMoreReviews = this.noMoreReviews.bind(this);
         this.getMoreReviews();
     }
     insertIntoReducer(data) {
@@ -58,18 +59,24 @@ export class ReviewListScreen extends Component {
         mapReviews(newObj, article.id);
 
     }
+    noMoreReviews(id) {
+        const { reviews, map } = this.props;
+        console.log("Loadanje");
+        if (reviews[id].length === map[id].length) return null;
+        else this.getMoreReviews();
+    }
     renderRow(data, rowId) {
         return <Review data={data} key={rowId} />;
     }
     render() {
-        const { map, id, loader } = this.props;
+        const { map, id, loader, article } = this.props;
         return (
             (map !== undefined && map[id] !== undefined && map !== null && map[id] !== null) ?
                 <ListView
                     data={map[id]}
                     renderRow={this.renderRow}
                     loading={loader.isLoading}
-                //  onLoadMore={this.getMoreReviews}
+                    onLoadMore={this.noMoreReviews(article.id)}
                 /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
         );
     }

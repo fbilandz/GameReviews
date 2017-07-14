@@ -13,7 +13,7 @@ import { connectStyle } from '@shoutem/theme';
 import { ext } from '../const';
 import StarRating from 'react-native-star-rating';
 import { connect } from 'react-redux';
-import { addAReview } from '../redux/actions';
+import { addAReview, mapReviews } from '../redux/actions';
 import { loginRequired } from 'shoutem.auth';
 import moment from 'moment';
 import _ from 'lodash';
@@ -34,7 +34,7 @@ export class AddAReviewScreen extends Component {
     this.addAReview = this.addAReview.bind(this);
   }
   addAReview() {
-    const { onClose, addAReview, id, userId, username } = this.props;
+    const { onClose, mapReview, addAReview, id, userId, username } = this.props;
     console.log(this.state)
     fetch('https://gamereviewsapp.firebaseio.com/reviews/reviews/' + this.props.id + '.json?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk',
       {
@@ -108,6 +108,7 @@ const styles = {
 };
 const mapDispatchToProps = {
   addAReview,
+  mapReviews,
 };
 
 const mapStateToProps = (state) => {

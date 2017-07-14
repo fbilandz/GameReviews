@@ -5,6 +5,7 @@ import {
     REVIEWS_LOADED,
     REIVEWS_FETCH_ERROR,
     MAP_REVIEWS,
+    MAP_REVIEW,
 } from './types';
 
 export function addReviews(reviews, id) {
@@ -43,10 +44,18 @@ export function reviewsFetchError() {
     }
 }
 
-export function mapReviews(payload, id){
+export function mapReviews(payload, id) {
     return {
         type: MAP_REVIEWS,
         payload,
         id,
     };
+}
+export function mapReview(review, name, id) {
+    return {
+        type: MAP_REVIEW,
+        payload: review,
+        name: name,
+        id: id
+    }
 }
