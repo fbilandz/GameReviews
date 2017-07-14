@@ -56,7 +56,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     this.renderRow = this.renderRow.bind(this);
     this.getReview = this.getReview.bind(this);
     this.addAReview = this.addAReview.bind(this);
-    this.getMoreReviews = this.getMoreReviews.bind(this);
+    // this.getMoreReviews = this.getMoreReviews.bind(this);
     this.openListScreen = this.openListScreen.bind(this);
     this.getReview();
   }
@@ -90,30 +90,6 @@ export class ReviewLayoutScreen extends React.PureComponent {
       addAReview(data[dataKey], dataKey);
     });*/
     addReviews(data, article.id);
-  }
-  getMoreReviews() {
-    const { addReviews, reviewsLoading, reviewsFetchError, reviewsLoaded } = this.props;
-    reviewsLoading();
-    fetch('https://gamereviewsapp.firebaseio.com' + '/reviews/reviews/' + this.props.article.id + '.json' + '?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk' + '&orderBy=%22username%22&limitToFirst=5&print=pretty%27')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-        //  selected review are saved in responseJson.selReview
-        this.insertIntoReducer(responseJson);
-        this.setState({
-          loading: false,
-        });
-        reviewsLoaded();
-        this.setState({
-          rating: this.getRating(this.props.reviews[this.props.article.id])
-        });
-        console.log(this.state);
-        //  addReviews(this.state.data)
-      })
-      .catch((error) => {
-        reviewsFetchError();
-        console.log(error);
-      });
   }
   getReview() {
     console.log(this.props);
