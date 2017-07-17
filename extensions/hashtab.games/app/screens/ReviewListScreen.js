@@ -26,7 +26,8 @@ export class ReviewListScreen extends Component {
         }
         this.getMoreReviews = this.getMoreReviews.bind(this);
         this.noMoreReviews = this.noMoreReviews.bind(this);
-        this.getMoreReviews();
+        this.inititalReviews = this.inititalReviews.bind(this);
+        this.inititalReviews();
     }
     insertIntoReducer(data) {
         //const { addReviews, article } = this.props;
@@ -35,6 +36,28 @@ export class ReviewListScreen extends Component {
           addAReview(data[dataKey], dataKey);
         });*/
         //Reviews(data, article.id);
+    }
+    inititalReviews() {
+        const { mapReviews, article, reviews, map } = this.props;
+        console.log(reviews);
+        const keys = Object.keys(map[article.id]);
+        console.log(keys)
+        var newObj = {}, found = true, i = 0;
+        Object.keys(reviews[article.id]).map(function (dataKey, index) {
+            if (i === 10) found = false;
+            if (found) {
+                newObj[dataKey] = reviews[article.id][dataKey];
+                i++;
+            }
+            var ind = 0;
+            console.log(dataKey);
+            for (; ind < keys.length; ind++) {
+                if (keys[ind] == dataKey.toString()) break;
+            }
+            if (ind !== keys.length) i--;
+        });
+        console.log(newObj)
+        mapReviews(newObj, article.id);
     }
     getMoreReviews() {
         const { mapReviews, article, reviews, map } = this.props;
@@ -63,20 +86,20 @@ export class ReviewListScreen extends Component {
         const { reviews, map } = this.props;
         console.log("Loadanje");
         if (reviews[id].length === map[id].length) return null;
-        else this.getMoreReviews();
+        else return  this.getMoreReviews ;
     }
     renderRow(data, rowId) {
         return <Review data={data} key={rowId} />;
     }
     render() {
-        const { map, id, loader, article } = this.props;
+        const { map, id, loader, article, reviews } = this.props;
         return (
             (map !== undefined && map[id] !== undefined && map !== null && map[id] !== null) ?
                 <ListView
                     data={map[id]}
                     renderRow={this.renderRow}
                     loading={loader.isLoading}
-                    onLoadMore={this.noMoreReviews(article.id)}
+                    onLoadMore={this.getMoreReviews}
                 /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
         );
     }

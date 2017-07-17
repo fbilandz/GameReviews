@@ -9,7 +9,7 @@ import {
 } from '@shoutem/ui';
 import { StyleProvider, connectStyle } from '@shoutem/theme';
 import StarRating from 'react-native-star-rating';
-import {ext} from '../const';
+import { ext } from '../const';
 
 export class Review extends Component {
     constructor(props) {
@@ -78,19 +78,19 @@ const theme = {
         shadowOffset: { width: 5, height: 7 }
     },
     wrapper: {
-        flexWrap: 'wrap', 
+        flexWrap: 'wrap',
         alignItems: 'space-between',
         justifyContent: 'space-between',
-        flexDirection:'row',
+        flexDirection: 'row',
     },
 }
 
 
 const styles = StyleSheet.create({
-    wrapper:  {
-        flexWrap: 'wrap', 
+    wrapper: {
+        flexWrap: 'wrap',
         //alignItems: 'space-between',
         justifyContent: 'space-between',
-        flexDirection:'row',
+        flexDirection: 'row',
     },
 })
