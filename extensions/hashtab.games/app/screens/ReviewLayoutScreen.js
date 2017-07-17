@@ -33,6 +33,7 @@ import {
   reviewsLoaded,
   reviewsFetchError,
   mapReviews,
+  initialReviews,
 } from '../redux/actions';
 
 export class ReviewLayoutScreen extends React.PureComponent {
@@ -120,7 +121,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
       });
   }
   mapToMap() {
-    const { mapReviews, reviews, article } = this.props;
+    const { mapReviews, reviews, article, initialReviews } = this.props;
     console.log(reviews);
     var newObj = {}, found = true, i = 0;
     Object.keys(reviews[article.id]).map(function (dataKey, index) {
@@ -131,6 +132,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
       }
     });
     mapReviews(newObj, article.id);
+    initialReviews(newObj, article.id);
   }
   addAReview() {
     console.log(this.props);
@@ -183,10 +185,10 @@ export class ReviewLayoutScreen extends React.PureComponent {
     return <Review data={data} key={rowId} />;
   }
   render(rating) {
-    const { article, map, loader } = this.props;
+    const { article, initial, loader } = this.props;
     //  const { data } = this.state;
     const articleImage = article.image ? { uri: _.get(article, 'image.url') } : undefined;
-    console.log(map);
+    console.log(initial);
     return (
       <Screen styleName="full-screen paper">
         <NavigationBar
@@ -239,9 +241,9 @@ export class ReviewLayoutScreen extends React.PureComponent {
             </Button>
             <Title styleName="h-center">Reviews</Title>
             {
-              (map !== undefined && map[article.id] !== undefined && map !== null && map[article.id] !== null) ?
+              (initial !== undefined && initial[article.id] !== undefined && initial !== null && initial[article.id] !== null) ?
                 <ListView
-                  data={map[article.id]}
+                  data={initial[article.id]}
                   renderRow={this.renderRow}
                   loading={loader.isLoading}
                 //  onLoadMore={this.getMoreReviews}
@@ -269,14 +271,16 @@ const mapDispatchToProps = {
   reviewsLoading,
   navigateTo,
   mapReviews,
+  initialReviews,
 };
 
 const mapStateToProps = (state) => {
-  const { reviews, loader, map } = state[ext()];
+  const { reviews, loader, map, initial } = state[ext()];
   return {
     reviews,
     loader,
     map,
+    initial,
   };
 };
 

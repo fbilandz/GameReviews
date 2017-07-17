@@ -6,6 +6,7 @@ import {
     REIVEWS_FETCH_ERROR,
     MAP_REVIEWS,
     MAP_REVIEW,
+    INITIAL,
 } from './types';
 
 export function addReviews(reviews, id) {
@@ -17,31 +18,38 @@ export function addReviews(reviews, id) {
     };
 }
 
+export function initialReviews(reviews, id){
+    return {
+        type: INITIAL,
+        payload: reviews,
+        id: id,
+    };
+}
+
 export function addAReview(review, name, id) {
     return {
         type: ADD_REVIEW,
         payload: review,
         name: name,
-        id: id
-    }
+        id: id,
+    };
 }
 export function reviewsLoading() {
     return {
         type: REVIEWS_LOADING,
-    }
+    };
 }
 
 export function reviewsLoaded() {
     return {
         type: REVIEWS_LOADED,
-
-    }
+    };
 }
 
 export function reviewsFetchError() {
     return {
         type: REIVEWS_FETCH_ERROR,
-    }
+    };
 }
 
 export function mapReviews(payload, id) {
@@ -57,5 +65,5 @@ export function mapReview(review, name, id) {
         payload: review,
         name: name,
         id: id
-    }
+    };
 }
