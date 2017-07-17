@@ -27,7 +27,7 @@ export class AddAReviewScreen extends Component {
     super(props);
     console.log(this.props);
     this.state = {
-      review: "Neki je",
+      review: "",
       rating: props.rating !== undefined || props.rating !== null ? props.rating : 0,
       props,
     };
@@ -59,7 +59,7 @@ export class AddAReviewScreen extends Component {
         addAReview({
           rating: this.state.rating,
           text: this.state.review,
-          username: this.props.user
+          username,
         },
           responseJson.name,
           this.props.id
@@ -114,7 +114,7 @@ const mapDispatchToProps = {
 const mapStateToProps = (state) => {
   const userId = _.get(state, ['shoutem.auth', 'user', 'id']);
   const username = _.get(state, ['shoutem.auth', 'user', 'name']);
-  console.log(userId);
+  console.log(userId, username);
   return {
     userId,
     username,

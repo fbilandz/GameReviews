@@ -32,8 +32,7 @@ export class Review extends Component {
                             />
                         </View>
                         <Text>{this.props.data.text}</Text>
-                        <Divider styleName="empty" />
-                        <Divider />
+                        <Divider styleName="line" />
                     </View>
                 </Card>
             </StyleProvider>
