@@ -5,7 +5,8 @@ import {
   Divider,
   Card,
   Image,
-  Caption
+  Caption,
+  Title,
 } from '@shoutem/ui';
 import { StyleProvider, connectStyle } from '@shoutem/theme';
 import StarRating from 'react-native-star-rating';
@@ -20,19 +21,21 @@ export class Review extends Component {
       <StyleProvider style={theme}>
         <Card styleName="card-content">
           <View styleName="content">
+            <Divider styleName="line" />
             <View style={styles.wrapper}>
-              <Subtitle>{this.props.data.username}</Subtitle>
-              <StarRating
-                disable
-                rating={this.props.data.rating}
-                maxStars={10}
-                starSize={20}
-                starColor={'red'}
-                selectedStar={(star) => console.log(star)}
-              />
+                <Subtitle>{this.props.data.username}</Subtitle>
+                <View style={styles.rating}>
+                <Title>{this.props.data.rating}  </Title>
+                <StarRating
+                  starColor={'#fdbc50'}
+                  starSize={30}
+                  disable
+                  rating={1}
+                  maxStars={1}
+                />
+              </View>
             </View>
             <Text>{this.props.data.text}</Text>
-            <Divider styleName="line" />
           </View>
         </Card>
       </StyleProvider>
@@ -91,5 +94,10 @@ const styles = StyleSheet.create({
     //  alignItems: 'space-between',
     justifyContent: 'space-between',
     flexDirection: 'row',
+  },
+  rating: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
