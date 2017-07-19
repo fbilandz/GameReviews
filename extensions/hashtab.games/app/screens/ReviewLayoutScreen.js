@@ -14,7 +14,7 @@ import {
   Button,
   Divider,
 } from '@shoutem/ui';
-import { Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { Text, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
 import { NavigationBar } from '@shoutem/ui/navigation';
 import { loginRequired } from 'shoutem.auth';
 import { closeModal, openInModal, navigateTo } from '@shoutem/core/navigation';
@@ -237,10 +237,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
               <Html body={article.body} />
             </View>
             <Divider styleName="line" />
-            <Button onPress={this.addAReview}>
-              <Icon name="like" />
-              <Text>Add a Review</Text>
-            </Button>
+            
             <Title styleName="h-center">Reviews</Title>
             {
               (initial !== undefined && initial[article.id] !== undefined && initial !== null && initial[article.id] !== null) ?
@@ -251,10 +248,16 @@ export class ReviewLayoutScreen extends React.PureComponent {
                 //  onLoadMore={this.getMoreReviews}
                 /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
             }
-            <Button onPress={() => this.openListScreen(article.id)}>
-              <Icon name="like" />
-              <Text>Load more content</Text>
-            </Button>
+            <View style={{ flexDirection: 'row', width: Dimensions.get('window').width }}>
+              <Button onPress={this.addAReview} style={{ marginHorizontal: 20 }}>
+                <Icon name="like" />
+                <Text>Add a Review</Text>
+              </Button>
+              <Button onPress={() => this.openListScreen(article.id)} style={{ marginHorizontal: 20 }}>
+                <Icon name="refresh" />
+                <Text>Load more</Text>
+              </Button>
+            </View>
           </View>
           {this.renderUpNext()}
         </ScrollView>
