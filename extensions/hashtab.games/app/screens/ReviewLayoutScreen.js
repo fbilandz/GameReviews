@@ -6,8 +6,9 @@ import {
   Title,
   Caption,
   Icon,
-  Image,
   Tile,
+  Image,
+  Subtitle,
   Html,
   View,
   ListView,
@@ -124,12 +125,10 @@ export class ReviewLayoutScreen extends React.PureComponent {
 
   getLastReview() {
     const { reviews, article } = this.props;
-    const last = Object.keys(reviews[article.id])[Object.keys(reviews[article.id]).length-1];
-    console.log('---------------------------GET LAST REVIEW-----------------------------');
-    console.log(reviews[article.id][last]);
+    const last = Object.keys(reviews[article.id])[Object.keys(reviews[article.id]).length - 1];
     return reviews[article.id][last];
   }
- 
+
   mapToMap() {
     const { mapReviews, reviews, article, initialReviews } = this.props;
     console.log(reviews);
@@ -212,14 +211,14 @@ export class ReviewLayoutScreen extends React.PureComponent {
         />
         <ScrollView>
           <Image
-            styleName="large-portrait placeholder"
+            styleName="large-banner placeholder"
             source={articleImage}
             animationName="hero"
           >
             <Tile animationName="hero">
               <Title styleName="centered">{article.title.toUpperCase()}</Title>
               {/* Virtual prop makes View pass Tile color style to Caption */}
-              <View styleName="horizontal md-gutter-top" virtual>
+              <View styleName="horizontal md-gutter-top" virtual>{}
                 <Caption styleName="collapsible" numberOfLines={1}>{article.newsAuthor}</Caption>
                 <Caption styleName="md-gutter-left">
                   {moment(article.timeUpdated).fromNow()}
@@ -230,14 +229,31 @@ export class ReviewLayoutScreen extends React.PureComponent {
           </Image>
           <View styleName="solid">
             <View styleName="solid h-center">
-              <Title styleName="h-center">Average rating:</Title>
-              <Text>{this.state.lastReview === undefined ? null : moment(this.state.lastReview.timeStamp).fromNow() }</Text>
+
+            <View styleName="horizontal space-between">
+              <View styleName="horizontal">
+              <Title>Rating: </Title>
+                <Title>{this.state.rating === undefined ? null : this.state.rating.toFixed(1)} </Title>
+                <StarRating
+                  starColor={'#fdbc50'}
+                  starSize={30}
+                  disable
+                  rating={1}
+                  maxStars={1}
+                />
+              </View>
+
+              <View styleName="md-gutter-right">
+                <Title>Last review : </Title>
+                <Subtitle>{this.state.lastReview === undefined ? null : moment(this.state.lastReview.timeStamp).fromNow()}</Subtitle>
+              </View>
+            </View>
               <Divider styleName="line" />
               <Title styleName="h-center">About</Title>
               <Html body={article.body} />
             </View>
             <Divider styleName="line" />
-            
+
             <Title styleName="h-center">Reviews</Title>
             {
               (initial !== undefined && initial[article.id] !== undefined && initial !== null && initial[article.id] !== null) ?
@@ -300,5 +316,10 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 70,
     flexDirection: 'row',
+  },
+  rating: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
