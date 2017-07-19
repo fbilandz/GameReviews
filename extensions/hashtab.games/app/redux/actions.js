@@ -18,7 +18,7 @@ export function addReviews(reviews, id) {
     };
 }
 
-export function initialReviews(reviews, id){
+export function initialReviews(reviews, id) {
     return {
         type: INITIAL,
         payload: reviews,

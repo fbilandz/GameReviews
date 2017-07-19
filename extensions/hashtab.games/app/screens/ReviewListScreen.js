@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import {
-    ListView,
+  ListView,
 } from '@shoutem/ui';
 import {
-    ActivityIndicator,
+  ActivityIndicator,
 } from 'react-native';
 import { Review } from '../components/Review';
 import { connect } from 'react-redux';
 import { closeModal, openInModal } from '@shoutem/core/navigation';
 import {
-    addReviews,
-    addAReview,
-    reviewsLoading,
-    reviewsLoaded,
-    reviewsFetchError,
-    mapReviews,
+  addReviews,
+  addAReview,
+  reviewsLoading,
+  reviewsLoaded,
+  reviewsFetchError,
+  mapReviews,
 } from '../redux/actions';
 import { ext } from '../const';
 
@@ -22,7 +22,7 @@ export class ReviewListScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        props,
+      props,
     };
     this.getMoreReviews = this.getMoreReviews.bind(this);
     this.noMoreReviews = this.noMoreReviews.bind(this);
@@ -37,18 +37,18 @@ export class ReviewListScreen extends Component {
     console.log(keys);
     var newObj = {}, found = true, i = 0;
     Object.keys(reviews[article.id]).map(function (dataKey, index) {
-        if (i === 10) found = false;
-        if (found) {
-            newObj[dataKey] = reviews[article.id][dataKey];
-            i++;
-          }
-        var ind = 0;
-        console.log(dataKey);
-        for (; ind < keys.length; ind++) {
-            if (keys[ind] == dataKey.toString()) break;
-          }
-        if (ind !== keys.length) i--;
-      });
+      if (i === 10) found = false;
+      if (found) {
+        newObj[dataKey] = reviews[article.id][dataKey];
+        i++;
+      }
+      var ind = 0;
+      console.log(dataKey);
+      for (; ind < keys.length; ind++) {
+        if (keys[ind] == dataKey.toString()) break;
+      }
+      if (ind !== keys.length) i--;
+    });
     console.log(newObj);
     mapReviews(newObj, article.id);
   }
@@ -59,18 +59,18 @@ export class ReviewListScreen extends Component {
     console.log(keys);
     var newObj = {}, found = true, i = 0;
     Object.keys(reviews[article.id]).map(function (dataKey, index) {
-        if (i === 5) found = false;
-        if (found) {
-            newObj[dataKey] = reviews[article.id][dataKey];
-            i++;
-          }
-        var ind = 0;
-        console.log(dataKey);
-        for (; ind < keys.length; ind++) {
-            if (keys[ind] == dataKey.toString()) break;
-          }
-        if (ind !== keys.length) i--;
-      });
+      if (i === 5) found = false;
+      if (found) {
+        newObj[dataKey] = reviews[article.id][dataKey];
+        i++;
+      }
+      var ind = 0;
+      console.log(dataKey);
+      for (; ind < keys.length; ind++) {
+        if (keys[ind] === dataKey.toString()) break;
+      }
+      if (ind !== keys.length) i--;
+    });
     console.log(newObj);
     mapReviews(newObj, article.id);
   }
@@ -86,14 +86,17 @@ export class ReviewListScreen extends Component {
   render() {
     const { map, id, loader, article, reviews } = this.props;
     return (
-            (map !== undefined && map[id] !== undefined && map !== null && map[id] !== null) ?
-                <ListView
-                  data={map[id]}
-                  renderRow={this.renderRow}
-                  loading={loader.isLoading}
-                  onLoadMore={this.getMoreReviews}
-                /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
-        );
+      (map !== undefined && map[id] !== undefined && map !== null && map[id] !== null) ?
+        <ListView
+          data={map[id]}
+          renderRow={this.renderRow}
+          loading={loader.isLoading}
+          onLoadMore={this.getMoreReviews}
+        />
+        :
+        loader.isLoading ?
+          <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
+    );
   }
 }
 

@@ -1,15 +1,17 @@
 import { combineReducers } from 'redux';
 import {
-    ADD_REVIEWS,
-    ADD_REVIEW,
-    REVIEWS_LOADING,
-    REVIEWS_LOADED,
-    REIVEWS_FETCH_ERROR,
-    MAP_REVIEWS,
-    MAP_REVIEW,
-    INITIAL,
+  ADD_REVIEWS,
+  ADD_REVIEW,
+  REVIEWS_LOADING,
+  REVIEWS_LOADED,
+  REIVEWS_FETCH_ERROR,
+  MAP_REVIEWS,
+  MAP_REVIEW,
+  INITIAL,
 } from './types';
 
+import _ from 'lodash';
+import { mapReducers } from '@shoutem/redux-composers';
 import { preventStateRehydration } from '@shoutem/core/preventStateRehydration';
 
 const reviews = (state = {}, action) => {
@@ -18,20 +20,17 @@ const reviews = (state = {}, action) => {
   console.log(state, action);
   switch (action.type) {
     case ADD_REVIEWS:
-            // var s = state[id] !== undefined ? state[id] + payload : payload
-      const f = Object.assign(state[id] === undefined ? {} : state[id], payload);
-      console.log(f);
+      // var s = state[id] !== undefined ? state[id] + payload : payload
+      // const f = Object.assign(state[id] === undefined ? {} : state[id], payload);
+      // console.log(f);
       return {
         ...state,
-        [id]: { ...f },
+        ...payload,
       };
     case ADD_REVIEW:
       return {
         ...state,
-        [id]: {
-          ...state[id],
-          [action.name]: payload,
-        },
+        [action.name]: { ...payload },
       };
     default:
       return state;
@@ -72,7 +71,7 @@ const map = (state = {}, action) => {
         [action.id]: { ...f },
       };
     case ADD_REVIEW:
-            // const f = Object.assign(state[id] === undefined ? {} : state[id], payload);
+      // const f = Object.assign(state[id] === undefined ? {} : state[id], payload);
       return {
         ...state,
         [action.id]: {
@@ -96,7 +95,7 @@ const initial = (state = {}, action) => {
         [action.id]: { ...f },
       };
     case ADD_REVIEW:
-            // const f = Object.assign(state[id] === undefined ? {} : state[id], payload);
+      // const f = Object.assign(state[id] === undefined ? {} : state[id], payload);
       return {
         ...state,
         [action.id]: {
@@ -109,5 +108,11 @@ const initial = (state = {}, action) => {
   }
 };
 
+function idSelector(action) {
+  return _.get(action, 'id');
+};
 
-export default preventStateRehydration(combineReducers({ reviews, loader, map, initial }));
+
+export default preventStateRehydration(
+  combineReducers({ reviews: mapReducers(idSelector, reviews), loader, map, initial })
+);
