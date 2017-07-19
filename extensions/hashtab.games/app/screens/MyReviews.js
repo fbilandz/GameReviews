@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';\
+} from 'react-native';
 import { ListView } from '@shoutem/ui'
 
 export default class MyReviews extends Component {
