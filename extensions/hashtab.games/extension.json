@@ -17,6 +17,14 @@
     },
     {
       "name": "ReviewListScreen"
+    },
+    {
+      "name": "MyReviews"
     }
-  ]
+  ],
+  "shortcuts": [{
+    "name": "Reviews",
+    "title": "My Reviews",
+    "screen": "@.MyReviews"
+  }]
 }

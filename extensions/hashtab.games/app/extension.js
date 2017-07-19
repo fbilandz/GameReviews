@@ -6,7 +6,7 @@ import pack from './package.json';
 import ReviewLayoutScreen from './screens/ReviewLayoutScreen';
 import AddAReviewScreen from './screens/AddAReviewScreen';
 import ReviewListScreen from './screens/ReviewListScreen';
-
+import MyReviews from './screens/MyReviews';
 
 // themes imports
 
@@ -15,6 +15,7 @@ export const screens = {
   ReviewLayoutScreen,
   AddAReviewScreen,
   ReviewListScreen,
+  MyReviews,
 };
 
 export const themes = {
