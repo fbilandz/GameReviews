@@ -7,6 +7,7 @@ import {
   REIVEWS_FETCH_ERROR,
   MAP_REVIEWS,
   MAP_REVIEW,
+  EDIT_REVIEW,
   INITIAL,
 } from './types';
 
@@ -17,6 +18,7 @@ import { preventStateRehydration } from '@shoutem/core/preventStateRehydration';
 const reviews = (state = {}, action) => {
   const id = action.id;
   const payload = action.payload;
+  const name = action.name;
   console.log(state, action);
   switch (action.type) {
     case ADD_REVIEWS:
@@ -30,8 +32,17 @@ const reviews = (state = {}, action) => {
     case ADD_REVIEW:
       return {
         ...state,
-        [action.name]: { ...payload },
+        [name]: { ...payload },
       };
+    case EDIT_REVIEW:
+      const s = { ...state };
+      console.log(s);
+      delete s[name];
+      return {
+        ...s,
+        [name]: { ...payload },
+      };
+
     default:
       return state;
   }

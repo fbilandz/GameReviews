@@ -110,6 +110,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
         reviewsLoaded();
         this.setState({
           rating: this.getRating(this.props.reviews[this.props.article.id]),
+          lastReview: this.getLastReview(),
         });
         this.mapToMap();
         //  addFirst(x, this.props.article.id);
@@ -120,6 +121,15 @@ export class ReviewLayoutScreen extends React.PureComponent {
         console.log(error);
       });
   }
+
+  getLastReview() {
+    const { reviews, article } = this.props;
+    const last = Object.keys(reviews[article.id])[Object.keys(reviews[article.id]).length-1];
+    console.log('---------------------------GET LAST REVIEW-----------------------------');
+    console.log(reviews[article.id][last]);
+    return reviews[article.id][last];
+  }
+ 
   mapToMap() {
     const { mapReviews, reviews, article, initialReviews } = this.props;
     console.log(reviews);
@@ -221,15 +231,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
           <View styleName="solid">
             <View styleName="solid h-center">
               <Title styleName="h-center">Average rating:</Title>
-              <StarRating
-                disable
-                rating={this.state.rating}
-                maxStars={10}
-                starSize={25}
-                starStyle={{ justifyContent: 'center' }}
-                starColor={'red'}
-                selectedStar={(star) => this.addAReview(star)}
-              />
+              <Text>{this.state.lastReview === undefined ? null : moment(this.state.lastReview.timeStamp).fromNow() }</Text>
               <Divider styleName="line" />
               <Title styleName="h-center">About</Title>
               <Html body={article.body} />

@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { ext } from '../const';
 import _ from 'lodash';
 import { Review } from '../components/Review';
+import { navigateTo } from '@shoutem/core/navigation';
 
 export class MyReviews extends Component {
   constructor(props) {
@@ -33,27 +34,41 @@ export class MyReviews extends Component {
     const s = [];
     _.keys(reviews).map((value, index) => {
       _.keys(reviews[value]).map((data, i) => {
-        if (reviews[value][data].userId === userId) s.push(reviews[value][data]);
+        if (reviews[value][data].userId === userId) {
+          const x = reviews[value][data];
+          x.id = data;
+          x.value = value;
+          s.push(x);
+        }
       });
     });
-
-    console.log("gettam");
     this.setState({
       data: s,
       tried: true,
     });
   }
-  edit() {
-
+  edit(id, value) {
+    const { navigateTo, article, userId } = this.props;
+    const route = {
+      screen: ext('FullReviewScreen'),
+      props: {
+        id,
+        value,
+        user: userId,
+      },
+    };
+    navigateTo(route);
   }
   renderRow(data, id) {
     return (
-      <TouchableOpacity onPress={this.edit}>
+      <TouchableOpacity onPress={() => this.edit(data.id, data.value)}>
         <Review data={data} key={id} />
-      </TouchableOpacity>);
+      </TouchableOpacity>
+    );
   }
   render() {
     const { tried, data } = this.state;
+    console.log(this.state);
     if (!tried) this.getMyReviews();
     return (
 
@@ -87,4 +102,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(MyReviews);
+const mapDispatchToProps = {
+  navigateTo,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyReviews);

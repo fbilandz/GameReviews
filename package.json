@@ -28,6 +28,7 @@
     "react-native-code-push": "^2.0.2-beta",
     "react-native-fbsdk": "shoutem/react-native-fbsdk#45bac0c78ad6b02ee67f7e5d91b192e7e2aa6640",
     "react-native-google-analytics-bridge": "5.0.0",
+    "react-native-lightbox": "^0.6.0",
     "react-native-maps": "0.13.0",
     "react-native-paginated-listview": "^1.0.2",
     "react-native-restart": "0.0.2",

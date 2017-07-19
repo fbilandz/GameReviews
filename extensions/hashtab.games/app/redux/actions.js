@@ -7,6 +7,7 @@ import {
     MAP_REVIEWS,
     MAP_REVIEW,
     INITIAL,
+    EDIT_REVIEW,
 } from './types';
 
 export function addReviews(reviews, id) {
@@ -59,11 +60,21 @@ export function mapReviews(payload, id) {
         id,
     };
 }
+
 export function mapReview(review, name, id) {
     return {
         type: MAP_REVIEW,
         payload: review,
         name: name,
         id: id
+    };
+}
+
+export function editAReview(review, name, id) {
+    return {
+        type: EDIT_REVIEW,
+        payload: review,
+        name: name,
+        id: id,
     };
 }

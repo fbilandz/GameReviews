@@ -19,12 +19,20 @@
       "name": "ReviewListScreen"
     },
     {
-      "name": "MyReviews"
+      "name": "MyReviews",
+      "navigatesTo": [
+        "@.FullReviewScreen"
+      ]
+    },
+    {
+      "name": "FullReviewScreen"
     }
   ],
-  "shortcuts": [{
-    "name": "Reviews",
-    "title": "My Reviews",
-    "screen": "@.MyReviews"
-  }]
+  "shortcuts": [
+    {
+      "name": "Reviews",
+      "title": "My Reviews",
+      "screen": "@.MyReviews"
+    }
+  ]
 }
