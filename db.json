@@ -1,0 +1,13 @@
+{
+  "reviews" :
+  {
+    "2378038" : [
+      {"text" : "najs", "username" : "billy"}, 
+      {"text" : "ipak nije najs", "username" : "billy"}
+      ]
+  },
+  "users" :
+  {
+    "1" : {"username" : "billy", "password" : "djenojegej"}
+  }
+}
