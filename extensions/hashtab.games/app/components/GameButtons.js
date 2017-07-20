@@ -8,7 +8,6 @@ import {
 import { Text, Dimensions } from 'react-native';
 import { closeModal, openInModal, navigateTo } from '@shoutem/core/navigation';
 import { ext } from '../const';
-import { GameBanner } from '../components/GameBanner';
 import { connect } from 'react-redux';
 
 
@@ -45,4 +44,4 @@ const mapStateToProps = (state) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(connectStyle(ext('GameBanner'))(GameBanner));
+export default connect(mapStateToProps, mapDispatchToProps)(connectStyle(ext('GameButtons'))(GameButtons));

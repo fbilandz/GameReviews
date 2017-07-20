@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleProvider, connectStyle } from '@shoutem/theme';
 import {
   ScrollView,
+  ListView,
   Screen,
+  Title,
   View,
   Divider,
 } from '@shoutem/ui';
@@ -17,7 +19,6 @@ import { Review } from '../components/Review';
 import { GameStats } from '../components/GameStats';
 import { GameBanner } from '../components/GameBanner';
 import { GameButtons } from '../components/GameButtons';
-import { GameReviews } from '../components/GameReviews';
 import { connect } from 'react-redux';
 import {
   addReviews,
@@ -29,18 +30,7 @@ import {
   initialReviews,
 } from '../redux/actions';
 
-export class ReviewLayoutScreen extends React.PureComponent {
-  static propTypes = {
-    // The news article to display
-    article: React.PropTypes.object.isRequired,
-    // The next article, if this article is defined, the
-    // up next view will be displayed on this screen
-    nextArticle: React.PropTypes.object,
-    // A function that will open the given article, this
-    // function is required to show the up next view
-    openArticle: React.PropTypes.func,
-    openInModal: React.PropTypes.func,
-  };
+export class ReviewLayoutScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -201,14 +191,12 @@ export class ReviewLayoutScreen extends React.PureComponent {
         />
         <ScrollView>
           <GameBanner article={article} articleImage={articleImage} />
-
-          <View styleName="solid">
-            <GameStats lastReview={this.state.lastReview} rating={this.state.rating} />
+          <GameStats lastReview={this.state.lastReview} rating={this.state.rating} />
             <Divider styleName="line" />
 
             <Title styleName="h-center">Reviews</Title>
             {
-              (initial !== undefined && initial[article.id] !== undefined && initial !== null && initial[article.id] !== null) ?
+              ( initial !== undefined && initial[article.id] !== undefined && initial !== null && initial[article.id] !== null) ?
                 <ListView
                   data={initial[article.id]}
                   renderRow={this.renderRow}
@@ -217,7 +205,6 @@ export class ReviewLayoutScreen extends React.PureComponent {
                 /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
             }
             <GameButtons article={article} addAReview={this.addAReview} openListScreen={this.openListScreen} />
-          </View>
           {this.renderUpNext()}
         </ScrollView>
       </Screen>

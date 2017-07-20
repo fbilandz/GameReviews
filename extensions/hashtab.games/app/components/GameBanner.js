@@ -12,7 +12,7 @@ import moment from 'moment';
 import { ext } from '../const';
 import { connect } from 'react-redux';
 
-export class GameReviews extends React.PureComponent {
+export class GameBanner extends React.PureComponent {
 	constructor(props) {
 		super(props);
 	}
@@ -43,5 +43,5 @@ export class GameReviews extends React.PureComponent {
 	}
 }
 
-export default connect()(connectStyle(ext('GameBanner'))(GameReviews)
+export default connect()(connectStyle(ext('GameBanner'))(GameBanner)
 );
