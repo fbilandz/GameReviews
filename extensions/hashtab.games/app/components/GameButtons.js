@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connectStyle } from '@shoutem/theme';
 import {
   Icon,
@@ -12,46 +12,22 @@ import { GameBanner } from '../components/GameBanner';
 import { connect } from 'react-redux';
 
 
-export class GameButtons extends React.PureComponent {
+export class GameButtons extends Component {
   constructor(props) {
     super(props);
-  }
-
-  openListScreen(id) {
-    const { navigateTo, article } = this.props;
-    const route = {
-      screen: ext('ReviewListScreen'),
-      title: article.title,
-      props: {
-        article,
-        id,
-      },
-    };
-    navigateTo(route);
-  }
-
-  addAReview() {
-    console.log(this.props);
-    const { openInModal, closeModal, article } = this.props;
-    const route = {
-      screen: ext('AddAReviewScreen'),
-      props: {
-        user: 'Billy',
-        id: article.id,
-        onClose: closeModal,
-      },
-    };
-    openInModal(route);
+    //this.addAReview = this.addAReview.bind(this);
   }
 
   render() {
+    console.log(this.props);
+    const { addAReview, openListScreen } = this.props
     return (
       <View style={{ flexDirection: 'row', width: Dimensions.get('window').width }}>
-        <Button onPress={this.addAReview} style={{ marginHorizontal: 20 }}>
+        <Button onPress={() => addAReview()} style={{ marginHorizontal: 20 }}>
           <Icon name="like" />
           <Text>Add a Review</Text>
         </Button>
-        <Button onPress={() => this.openListScreen(this.props.article.id)} style={{ marginHorizontal: 20 }}>
+        <Button onPress={() => openListScreen(this.props.article.id)} style={{ marginHorizontal: 20 }}>
           <Icon name="refresh" />
           <Text>Load more</Text>
         </Button>
@@ -65,4 +41,8 @@ const mapDispatchToProps = {
   navigateTo,
 };
 
-export default connect(mapDispatchToProps)(connectStyle(ext('GameBanner'))(GameBanner));
+const mapStateToProps = (state) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(connectStyle(ext('GameBanner'))(GameBanner));

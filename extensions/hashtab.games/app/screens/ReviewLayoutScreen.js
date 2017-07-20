@@ -55,6 +55,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     this.renderRow = this.renderRow.bind(this);
     this.getReview = this.getReview.bind(this);
     this.addAReview = this.addAReview.bind(this);
+    this.openListScreen = this.openListScreen.bind(this);
     // this.getMoreReviews = this.getMoreReviews.bind(this);
     this.mapToMap = this.mapToMap.bind(this);
     this.getReview();
@@ -111,6 +112,31 @@ export class ReviewLayoutScreen extends React.PureComponent {
     const last = Object.keys(reviews[article.id])[Object.keys(reviews[article.id]).length - 1];
     return reviews[article.id][last];
   }
+  openListScreen(id) {
+    const { navigateTo, article } = this.props;
+    const route = {
+      screen: ext('ReviewListScreen'),
+      title: article.title,
+      props: {
+        article,
+        id,
+      },
+    };
+    navigateTo(route);
+  }
+
+  addAReview() {
+    console.log(this.props);
+    const { openInModal, closeModal, article } = this.props;
+    const route = {
+      screen: ext('AddAReviewScreen'),
+      props: {
+        id: article.id,
+        onClose: closeModal,
+      },
+    };
+    openInModal(route);
+  }
 
   mapToMap() {
     const { mapReviews, reviews, article, initialReviews } = this.props;
@@ -126,7 +152,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     mapReviews(newObj, article.id);
     initialReviews(newObj, article.id);
   }
-  
+
   addAReview(rating) {
     console.log(this.props);
     const { openInModal, closeModal, article } = this.props;
@@ -160,7 +186,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
   renderRow(data, rowId) {
     return <Review data={data} key={rowId} />;
   }
-  
+
   render() {
     const { article, initial, loader } = this.props;
     //  const { data } = this.state;
@@ -178,10 +204,10 @@ export class ReviewLayoutScreen extends React.PureComponent {
           }}
         />
         <ScrollView>
-          <GameBanner article={article} articleImage={articleImage}/>
-  
-          <View styleName="solid">  
-            <GameStats lastReview={this.state.lastReview} rating={this.state.rating}/>
+          <GameBanner article={article} articleImage={articleImage} />
+
+          <View styleName="solid">
+            <GameStats lastReview={this.state.lastReview} rating={this.state.rating} />
             <Divider styleName="line" />
 
             <Title styleName="h-center">Reviews</Title>
@@ -194,7 +220,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
                 //  onLoadMore={this.getMoreReviews}
                 /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
             }
-          <GameButtons article={article}/>
+            <GameButtons article={article} addAReview={this.addAReview} openListScreen={this.openListScreen} />
           </View>
           {this.renderUpNext()}
         </ScrollView>

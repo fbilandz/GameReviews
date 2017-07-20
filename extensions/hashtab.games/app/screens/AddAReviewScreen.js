@@ -112,7 +112,6 @@ export class AddAReviewScreen extends Component {
           editable
           onChangeText={(text) => this.setState({ review: text })}
           numberOfLines={4}
-          maxLength={140}
           multiline
           placeholder="Write a review"
           value={this.state.review}
