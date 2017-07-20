@@ -4,12 +4,8 @@ import {
   ScrollView,
   Screen,
   Title,
-  Caption,
   Icon,
   Tile,
-  Image,
-  Subtitle,
-  Html,
   View,
   ListView,
   Button,
@@ -20,12 +16,12 @@ import { NavigationBar } from '@shoutem/ui/navigation';
 import { loginRequired } from 'shoutem.auth';
 import { closeModal, openInModal, navigateTo } from '@shoutem/core/navigation';
 import * as _ from 'lodash';
-import moment from 'moment';
 import { ext } from '../const';
 import { NextArticle } from '../components/NextArticle';
 import { Review } from '../components/Review';
-import StarRating from 'react-native-star-rating';
-import AddAReviewScreen from './AddAReviewScreen';
+import { GameStats } from '../components/GameStats';
+import { GameBanner } from '../components/GameBanner';
+import { GameButtons } from '../components/GameButtons';
 import { connect } from 'react-redux';
 import {
   addReviews,
@@ -60,21 +56,8 @@ export class ReviewLayoutScreen extends React.PureComponent {
     this.getReview = this.getReview.bind(this);
     this.addAReview = this.addAReview.bind(this);
     // this.getMoreReviews = this.getMoreReviews.bind(this);
-    this.openListScreen = this.openListScreen.bind(this);
     this.mapToMap = this.mapToMap.bind(this);
     this.getReview();
-  }
-  openListScreen(id) {
-    const { navigateTo, article } = this.props;
-    const route = {
-      screen: ext('ReviewListScreen'),
-      title: article.title,
-      props: {
-        article,
-        id,
-      },
-    };
-    navigateTo(route);
   }
   getRating(data) {
     if (data === null || data === undefined) return 0;
@@ -143,22 +126,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     mapReviews(newObj, article.id);
     initialReviews(newObj, article.id);
   }
-  addAReview() {
-    console.log(this.props);
-    const { openInModal, closeModal, article } = this.props;
-
-    const route = {
-      screen: ext('AddAReviewScreen'),
-      props: {
-        user: "Billy",
-        id: article.id,
-        onClose: closeModal,
-      },
-    };
-
-    openInModal(route);
-  }
-
+  
   addAReview(rating) {
     console.log(this.props);
     const { openInModal, closeModal, article } = this.props;
@@ -172,7 +140,6 @@ export class ReviewLayoutScreen extends React.PureComponent {
         rating,
       },
     };
-
     openInModal(route);
   }
 
@@ -187,13 +154,14 @@ export class ReviewLayoutScreen extends React.PureComponent {
         />
       );
     }
-
     return null;
   }
+
   renderRow(data, rowId) {
     return <Review data={data} key={rowId} />;
   }
-  render(rating) {
+  
+  render() {
     const { article, initial, loader } = this.props;
     //  const { data } = this.state;
     const articleImage = article.image ? { uri: _.get(article, 'image.url') } : undefined;
@@ -210,48 +178,10 @@ export class ReviewLayoutScreen extends React.PureComponent {
           }}
         />
         <ScrollView>
-          <Image
-            styleName="large-banner placeholder"
-            source={articleImage}
-            animationName="hero"
-          >
-            <Tile animationName="hero">
-              <Title styleName="centered">{article.title.toUpperCase()}</Title>
-              {/* Virtual prop makes View pass Tile color style to Caption */}
-              <View styleName="horizontal md-gutter-top" virtual>{}
-                <Caption styleName="collapsible" numberOfLines={1}>{article.newsAuthor}</Caption>
-                <Caption styleName="md-gutter-left">
-                  {moment(article.timeUpdated).fromNow()}
-                </Caption>
-              </View>
-            </Tile>
-            <Icon name="down-arrow" styleName="scroll-indicator" />
-          </Image>
-          <View styleName="solid">
-            <View styleName="solid h-center">
-
-            <View styleName="horizontal space-between">
-              <View styleName="horizontal">
-              <Title>Rating: </Title>
-                <Title>{this.state.rating === undefined ? null : this.state.rating.toFixed(1)} </Title>
-                <StarRating
-                  starColor={'#fdbc50'}
-                  starSize={30}
-                  disable
-                  rating={1}
-                  maxStars={1}
-                />
-              </View>
-
-              <View styleName="md-gutter-right">
-                <Title>Last review : </Title>
-                <Subtitle>{this.state.lastReview === undefined ? null : moment(this.state.lastReview.timeStamp).fromNow()}</Subtitle>
-              </View>
-            </View>
-              <Divider styleName="line" />
-              <Title styleName="h-center">About</Title>
-              <Html body={article.body} />
-            </View>
+          <GameBanner article={article} articleImage={articleImage}/>
+  
+          <View styleName="solid">  
+            <GameStats lastReview={this.state.lastReview} rating={this.state.rating}/>
             <Divider styleName="line" />
 
             <Title styleName="h-center">Reviews</Title>
@@ -264,16 +194,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
                 //  onLoadMore={this.getMoreReviews}
                 /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
             }
-            <View style={{ flexDirection: 'row', width: Dimensions.get('window').width }}>
-              <Button onPress={this.addAReview} style={{ marginHorizontal: 20 }}>
-                <Icon name="like" />
-                <Text>Add a Review</Text>
-              </Button>
-              <Button onPress={() => this.openListScreen(article.id)} style={{ marginHorizontal: 20 }}>
-                <Icon name="refresh" />
-                <Text>Load more</Text>
-              </Button>
-            </View>
+          <GameButtons article={article}/>
           </View>
           {this.renderUpNext()}
         </ScrollView>
@@ -310,16 +231,3 @@ export default loginRequired(
     connectStyle(ext('ReviewLayoutScreen')
     )(ReviewLayoutScreen))
 );
-
-const styles = StyleSheet.create({
-  button: {
-    flex: 1,
-    height: 70,
-    flexDirection: 'row',
-  },
-  rating: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

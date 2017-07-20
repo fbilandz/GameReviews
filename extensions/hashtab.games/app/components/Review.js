@@ -6,6 +6,7 @@ import {
   Card,
   Image,
   Row,
+  Icon,
   Tile,
   Caption,
   Title,
@@ -21,23 +22,22 @@ export class Review extends Component {
   }
   render() {
     return (
-      <Row style={styles.rating}>
-        <View styleName="horizontal space-between">
+      <View>
+      <View styleName="horizontal space-between">
+        <View styleName="vertical h-start">
           <Title>{this.props.data.username}</Title>
           <Subtitle>{moment(this.props.data.timeStamp).format('L')}</Subtitle>
-          <Text>{this.props.data.text}</Text>
         </View>
+        <View styleName="horizontal">
+          <Text>{this.props.data.rating}</Text>
+          <Icon name="add-to-favorites-full" />
+        </View>
+      </View>
 
-          <Title style={styles.text}>{this.props.data.rating}</Title>
-          <StarRating
-            starColor={'#fdbc50'}
-            starSize={30}
-            disable
-            rating={1}
-            maxStars={1}
-          />
-        <Divider styleName="line" />
-      </Row>
+      <View styleName="horizontal h-center">
+        <Text>{this.props.data.text}</Text>
+      </View>
+      </View>
     );
   }
 }
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text : {
+  text: {
     alignSelf: 'flex-end',
   },
 });
