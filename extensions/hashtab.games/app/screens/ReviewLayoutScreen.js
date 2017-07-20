@@ -3,12 +3,7 @@ import { StyleProvider, connectStyle } from '@shoutem/theme';
 import {
   ScrollView,
   Screen,
-  Title,
-  Icon,
-  Tile,
   View,
-  ListView,
-  Button,
   Divider,
 } from '@shoutem/ui';
 import { Text, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
@@ -22,6 +17,7 @@ import { Review } from '../components/Review';
 import { GameStats } from '../components/GameStats';
 import { GameBanner } from '../components/GameBanner';
 import { GameButtons } from '../components/GameButtons';
+import { GameReviews } from '../components/GameReviews';
 import { connect } from 'react-redux';
 import {
   addReviews,
@@ -126,7 +122,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
     mapReviews(newObj, article.id);
     initialReviews(newObj, article.id);
   }
-  
+
   addAReview(rating) {
     console.log(this.props);
     const { openInModal, closeModal, article } = this.props;
@@ -157,10 +153,6 @@ export class ReviewLayoutScreen extends React.PureComponent {
     return null;
   }
 
-  renderRow(data, rowId) {
-    return <Review data={data} key={rowId} />;
-  }
-  
   render() {
     const { article, initial, loader } = this.props;
     //  const { data } = this.state;
@@ -178,23 +170,13 @@ export class ReviewLayoutScreen extends React.PureComponent {
           }}
         />
         <ScrollView>
-          <GameBanner article={article} articleImage={articleImage}/>
-  
-          <View styleName="solid">  
-            <GameStats lastReview={this.state.lastReview} rating={this.state.rating}/>
-            <Divider styleName="line" />
+          <GameBanner article={article} articleImage={articleImage} />
 
-            <Title styleName="h-center">Reviews</Title>
-            {
-              (initial !== undefined && initial[article.id] !== undefined && initial !== null && initial[article.id] !== null) ?
-                <ListView
-                  data={initial[article.id]}
-                  renderRow={this.renderRow}
-                  loading={loader.isLoading}
-                //  onLoadMore={this.getMoreReviews}
-                /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
-            }
-          <GameButtons article={article}/>
+          <View styleName="solid">
+            <GameStats lastReview={this.state.lastReview} rating={this.state.rating} />
+            <Divider styleName="line" />
+            <GameReviews />
+            <GameButtons article={article} />
           </View>
           {this.renderUpNext()}
         </ScrollView>
