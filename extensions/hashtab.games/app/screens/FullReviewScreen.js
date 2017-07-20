@@ -4,8 +4,9 @@ import { ext } from '../const';
 import {
     Text,
     View,
+    StyleSheet,
 } from 'react-native';
-import { Screen, Button } from '@shoutem/ui';
+import { Screen, Button, Title } from '@shoutem/ui';
 import { NavigationBar } from '@shoutem/ui/navigation';
 import StarRating from 'react-native-star-rating';
 import _ from 'lodash';
@@ -44,11 +45,19 @@ export class FullReview extends Component {
                 <NavigationBar
                     title="Review"
                 />
-                <StarRating
-                    disable
-                    rating={f.rating}
-                    maxStars={10}
-                />
+                <View style={[styles.row, styles.space]}>
+                    <Title>{f.username}</Title>
+                    <View style={styles.row}>
+                        <Title>{f.rating}</Title>
+                        <StarRating
+                            disable
+                            rating={1}
+                            maxStars={1}
+                            starColor="#fdbc50"
+                            starSize={25}
+                        />
+                    </View>
+                </View>
                 <Text>{f.text}</Text>
                 {
                     (user === userId) ?
@@ -74,5 +83,14 @@ const mapDispatchToProps = {
     openInModal,
     closeModal,
 };
+
+const styles = StyleSheet.create({
+    row: {
+        flexDirection: 'row',
+    },
+    space: {
+        justifyContent: 'space-between',
+    },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(FullReview);
