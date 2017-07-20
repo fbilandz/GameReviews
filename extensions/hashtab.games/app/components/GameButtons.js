@@ -45,4 +45,4 @@ const mapStateToProps = (state) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(connectStyle(ext('GameBanner'))(GameBanner));
+export default connect(mapStateToProps, mapDispatchToProps)(connectStyle(ext('GameButtons'))(GameButtons));

@@ -23,20 +23,28 @@ export class Review extends Component {
   render() {
     return (
       <View>
-      <View styleName="horizontal space-between">
-        <View styleName="vertical h-start">
-          <Title>{this.props.data.username}</Title>
-          <Subtitle>{moment(this.props.data.timeStamp).format('L')}</Subtitle>
-        </View>
-        <View styleName="horizontal">
-          <Text>{this.props.data.rating}</Text>
-          <Icon name="add-to-favorites-full" />
-        </View>
-      </View>
+        <View style={[styles.row, styles.space]}>
+          <View styleName="vertical h-start">
+            <Title>{this.props.data.username}</Title>
+            <Subtitle>{moment(this.props.data.timeStamp).format('L')}</Subtitle>
+          </View>
+          <View style={styles.row}>
+            <Title>{this.props.data.rating}</Title>
+            <StarRating
+              maxStars={1}
+              disable
+              rating={1}
+              onSelectedStar={(star) => console.log(star)}
+              starSize={25}
+            />
+          </View>
 
-      <View styleName="horizontal h-center">
-        <Text>{this.props.data.text}</Text>
-      </View>
+        </View>
+
+        <View styleName="horizontal h-center">
+          <Text>{this.props.data.text}</Text>
+        </View>
+        <Divider styleName="line" />
       </View>
     );
   }
@@ -101,5 +109,11 @@ const styles = StyleSheet.create({
   },
   text: {
     alignSelf: 'flex-end',
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  space: {
+    justifyContent: 'space-between',
   },
 });
