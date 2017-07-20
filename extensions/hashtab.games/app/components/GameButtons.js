@@ -22,12 +22,12 @@ export class GameButtons extends Component {
     console.log(this.props);
     const { addAReview, openListScreen } = this.props
     return (
-      <View style={{ flexDirection: 'row', width: Dimensions.get('window').width }}>
-        <Button onPress={() => addAReview()} style={{ marginHorizontal: 20 }}>
+      <View style={{ flexDirection: 'row', width: Dimensions.get('window').width, justifyContent: 'center', marginTop: 10, marginBottom: 15 }}>
+        <Button onPress={() => addAReview()} style={{ marginHorizontal: 20, width: Dimensions.get('window').width * 0.4 }}>
           <Icon name="like" />
           <Text>Add a Review</Text>
         </Button>
-        <Button onPress={() => openListScreen(this.props.article.id)} style={{ marginHorizontal: 20 }}>
+        <Button onPress={() => openListScreen(this.props.article.id)} style={{ marginHorizontal: 20, width: Dimensions.get('window').width * 0.4 }}>
           <Icon name="refresh" />
           <Text>Load more</Text>
         </Button>

@@ -22,13 +22,13 @@ export class Review extends Component {
   }
   render() {
     return (
-      <View>
+      <View style={{ marginHorizontal: 15, marginVertical: 5 }}>
         <View style={[styles.row, styles.space]}>
           <View styleName="vertical h-start">
             <Title>{this.props.data.username}</Title>
             <Subtitle>{moment(this.props.data.timeStamp).format('L')}</Subtitle>
           </View>
-          <View style={styles.row}>
+          <View style={[styles.row, { alignSelf: 'center' }]}>
             <Title>{this.props.data.rating}</Title>
             <StarRating
               maxStars={1}
@@ -36,6 +36,7 @@ export class Review extends Component {
               rating={1}
               onSelectedStar={(star) => console.log(star)}
               starSize={25}
+              starColor={'#fdbc50'}
             />
           </View>
 
@@ -45,7 +46,7 @@ export class Review extends Component {
           <Text>{this.props.data.text}</Text>
         </View>
         <Divider styleName="line" />
-      </View>
+      </View >
     );
   }
 }

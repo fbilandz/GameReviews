@@ -17,9 +17,9 @@ export class GameStats extends React.PureComponent {
 
     render() {
         return (
-            <View>
+            <View style={{ marginHorizontal: 10, marginVertical: 5 }}>
                 <View styleName="horizontal space-between">
-                    <View styleName="horizontal">
+                    <View styleName="horizontal" style={{ alignSelf: 'center' }}>
                         <Title>Rating: </Title>
                         <Title>{this.props.rating === undefined ? null : this.props.rating.toFixed(1)} </Title>
                         <StarRating
