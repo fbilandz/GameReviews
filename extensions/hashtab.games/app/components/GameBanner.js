@@ -43,5 +43,4 @@ export class GameBanner extends React.PureComponent {
 	}
 }
 
-export default connect()(connectStyle(ext('GameBanner'))(GameBanner)
-);
+export default connectStyle(ext('GameBanner'))(GameBanner);

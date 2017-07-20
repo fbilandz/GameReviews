@@ -18,22 +18,29 @@ export class Review extends Component {
   }
   render() {
     return (
-      <View styleName="horizontal">
-      
-      <View styleName="vertical fill-parent">
-        <View styleName="horizontal">
-          <Title>{this.props.data.username}</Title>
-          <Subtitle>{moment(this.props.data.timeStamp).format('L')}</Subtitle>
-        </View>
-        <View styleName="vertical">
-          <Text>{this.props.data.rating}</Text>
-          <Icon name="like" />
-        </View>
-      </View>
+      <View>
+        <View style={[styles.row, styles.space]}>
+          <View styleName="vertical h-start">
+            <Title>{this.props.data.username}</Title>
+            <Subtitle>{moment(this.props.data.timeStamp).format('L')}</Subtitle>
+          </View>
+          <View style={styles.row}>
+            <Title>{this.props.data.rating}</Title>
+            <StarRating
+              maxStars={1}
+              disable
+              rating={1}
+              onSelectedStar={(star) => console.log(star)}
+              starSize={25}
+            />
+          </View>
 
-      <View styleName="vertical h-center">
-        <Text>{this.props.data.text}</Text>
-      </View>
+        </View>
+
+        <View styleName="horizontal h-center">
+          <Text>{this.props.data.text}</Text>
+        </View>
+        <Divider styleName="line" />
       </View>
     );
   }
@@ -41,4 +48,25 @@ export class Review extends Component {
 
 const styles = StyleSheet.create();
 
-export default connect()(connectStyle(ext('Review'))(Review));
+const styles = StyleSheet.create({
+  wrapper: {
+    flexWrap: 'wrap',
+    //  alignItems: 'space-between',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
+  rating: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    alignSelf: 'flex-end',
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  space: {
+    justifyContent: 'space-between',
+  },
+});
