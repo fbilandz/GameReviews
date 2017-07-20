@@ -5,6 +5,7 @@ import {
     Text,
     View,
     StyleSheet,
+    Dimensions,
 } from 'react-native';
 import { Screen, Button, Title } from '@shoutem/ui';
 import { NavigationBar } from '@shoutem/ui/navigation';
@@ -45,7 +46,7 @@ export class FullReview extends Component {
                 <NavigationBar
                     title="Review"
                 />
-                <View style={[styles.row, styles.space]}>
+                <View style={[styles.row, styles.space, styles.margina]}>
                     <Title>{f.username}</Title>
                     <View style={styles.row}>
                         <Title>{f.rating}</Title>
@@ -58,11 +59,11 @@ export class FullReview extends Component {
                         />
                     </View>
                 </View>
-                <Text>{f.text}</Text>
+                <Text style={styles.margina}>{f.text}</Text>
                 {
                     (user === userId) ?
-                        (<Button onPress={() => this.editReview(f)}>
-                            <Text>Edit</Text>
+                        (<Button styleName="lg-gutter-horizontal lg-gutter-vertical" onPress={() => this.editReview(f)}>
+                            <Text style={styles.marginText}>Edit</Text>
                         </Button>) : (<View />)
                 }
             </Screen>
@@ -90,6 +91,18 @@ const styles = StyleSheet.create({
     },
     space: {
         justifyContent: 'space-between',
+    },
+    margina: {
+        marginVertical: 15,
+        marginHorizontal: 10,
+    },
+    marginText: {
+        marginVertical: 5,
+    },
+    button: {
+        width: Dimensions.get('window').width * 0.8,
+        height: 10,
+        alignSelf: 'center',
     },
 });
 
