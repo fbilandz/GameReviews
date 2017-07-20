@@ -3,12 +3,7 @@ import { StyleProvider, connectStyle } from '@shoutem/theme';
 import {
   ScrollView,
   Screen,
-  Title,
-  Icon,
-  Tile,
   View,
-  ListView,
-  Button,
   Divider,
 } from '@shoutem/ui';
 import { Text, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
@@ -22,6 +17,7 @@ import { Review } from '../components/Review';
 import { GameStats } from '../components/GameStats';
 import { GameBanner } from '../components/GameBanner';
 import { GameButtons } from '../components/GameButtons';
+import { GameReviews } from '../components/GameReviews';
 import { connect } from 'react-redux';
 import {
   addReviews,
