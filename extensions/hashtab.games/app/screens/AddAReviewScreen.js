@@ -122,7 +122,11 @@ export class AddAReviewScreen extends Component {
           selectedStar={(rate) => this.setState({ rating: rate })}
           maxStars={10}
         />
-        <Button onPress={props.type === 'EDIT' ? this.editReview : this.addAReview}><Text>{props.type === 'EDIT' ? 'Edit' : 'Add'} a review</Text></Button>
+        <Button
+          onPress={props.type === 'EDIT' ? this.editReview : this.addAReview}
+        >
+          <Text>{props.type === 'EDIT' ? 'Edit' : 'Add'} a review</Text>
+        </Button>
       </View>
     );
   }
