@@ -42,5 +42,6 @@ export class GameStats extends React.PureComponent {
   }
 }
 
-export default connect()(connectStyle(ext('GameStats'))(GameStats)
+export default connect()(
+  connectStyle(ext('GameStats'))(GameStats)
 );

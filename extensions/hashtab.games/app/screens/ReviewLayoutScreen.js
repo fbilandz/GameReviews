@@ -118,6 +118,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
       props: {
         article,
         id,
+        getReviews: this.getReview,
       },
     };
     navigateTo(route);
@@ -190,6 +191,16 @@ export class ReviewLayoutScreen extends React.PureComponent {
     //  const { data } = this.state;
     const articleImage = article.image ? { uri: _.get(article, 'image.url') } : undefined;
     console.log(initial);
+    if (loader.isLoading) {
+      return (
+        <Screen styleName="full-screen paper" style={{ justifyContent: 'center' }}>
+          <NavigationBar
+            title={article.title}
+          />
+          <ActivityIndicator size="large" style={{ alignSelf: 'center' }} />
+        </Screen>
+      );
+    }
     return (
       <Screen styleName="full-screen paper">
         <NavigationBar
@@ -218,7 +229,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
                 //  onLoadMore={this.getMoreReviews}
                 /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
             }
-            <GameButtons article={article} addAReview={this.addAReview} openListScreen={this.openListScreen} />
+            <GameButtons article={article} addAReview={this.addAReview} openListScreen={this.openListScreen} getReviews={this.getReview} />
           </View>
           {this.renderUpNext()}
         </ScrollView>
