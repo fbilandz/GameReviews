@@ -204,36 +204,27 @@ export class ReviewLayoutScreen extends Component {
         <ScrollView>
           <GameBanner article={article} articleImage={articleImage} />
           <GameStats lastReview={this.state.lastReview} rating={this.state.rating} />
-            <Divider styleName="line" />
+          <Divider styleName="line" />
 
-            <Title styleName="h-center">Reviews</Title>
-            {
-<<<<<<< HEAD
-              ( initial !== undefined && initial[article.id] !== undefined && initial !== null && initial[article.id] !== null) ?
-=======
-              (initial !== undefined && initial[article.id] !== undefined
-                && initial !== null && initial[article.id] !== null) ?
->>>>>>> cbe6481749127ccc15330f840040cf711c648b01
-                <ListView
-                  data={initial[article.id]}
-                  renderRow={this.renderRow}
-                  loading={loader.isLoading}
-                //  onLoadMore={this.getMoreReviews}
-                />
-                :
-                loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
-            }
-<<<<<<< HEAD
-            <GameButtons article={article} addAReview={this.addAReview} openListScreen={this.openListScreen} />
-=======
-            <GameButtons
-              article={article}
-              addAReview={this.addAReview}
-              openListScreen={this.openListScreen}
-              getReviews={this.getReview}
-            />
-          </View>
->>>>>>> cbe6481749127ccc15330f840040cf711c648b01
+          <Title styleName="h-center">Reviews</Title>
+          {
+            (initial !== undefined && initial[article.id] !== undefined
+              && initial !== null && initial[article.id] !== null) ?
+              <ListView
+                data={initial[article.id]}
+                renderRow={this.renderRow}
+                loading={loader.isLoading}
+              //  onLoadMore={this.getMoreReviews}
+              />
+              :
+              loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
+          }
+          <GameButtons
+            article={article}
+            addAReview={this.addAReview}
+            openListScreen={this.openListScreen}
+            getReviews={this.getReview}
+          />
           {this.renderUpNext()}
         </ScrollView>
       </Screen>

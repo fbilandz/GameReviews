@@ -6,12 +6,15 @@ import {
   Picker,
   TouchableOpacity,
   Item,
+  ActivityIndicator,
+  Text,
 } from 'react-native';
 import {
   reviewsLoaded,
   reviewsFetchError,
+  reviewsLoading
 } from '../redux/actions';
-import { ListView } from '@shoutem/ui';
+import { ListView, Screen } from '@shoutem/ui';
 import { connect } from 'react-redux';
 import { ext } from '../const';
 import { loginRequired } from 'shoutem.auth';
@@ -105,25 +108,38 @@ export class MyReviews extends Component {
     );
   }
   render() {
-    const { s } = this.props;
+    const { s, loader } = this.props;
+    const { userReviews } = this.state;
+    // this.getReviewByUser();
     //const { tried, data } = this.state;
-    console.log("props iz my reviewsa", this.props);
+    console.log("props iz my reviewsa", this.state);
     //if (!tried) this.getMyReviews();
+    if (userReviews !== null) {
+      return (
+        <Screen><Picker
+          mode="dropdown"
+          selectedValue={this.state.selected}
+          onValueChange={() => { }}
+        >
+          {
+            _.keys(userReviews).map((item, index) => {
+              return (<Item label={item} value={index} key={index} />);
+            })
+          }
+        </Picker>
+        </Screen>)
+    }
+    else if (loader.isLoading) {
+      return (<ActivityIndicator size="large" />);
+    }
     return (
-
-      (s !== undefined || s !== null || s.length !== 0) ?
-        <ListView
-          data={s}
-          renderRow={this.renderRow}
-        /> : <Text>No reviews yet</Text>
-
+      <Text>No reviews yet</Text>
     );
-  }
   }
 }
 
 const mapStateToProps = (state) => {
-  const { reviews } = state[ext()];
+  const { reviews, loader } = state[ext()];
   const userId = _.get(state, ['shoutem.auth', 'user', 'id']);
   const s = [];
   _.keys(reviews).map((value, index) => {
@@ -139,6 +155,7 @@ const mapStateToProps = (state) => {
   return {
     s,
     userId,
+    loader,
   };
 };
 
