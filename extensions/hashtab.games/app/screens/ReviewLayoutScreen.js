@@ -126,7 +126,7 @@ export class ReviewLayoutScreen extends React.PureComponent {
 
   addAReview() {
     console.log(this.props);
-    const { openInModal, closeModal, article } = this.props;
+    const { navigateTo, article } = this.props;
     const route = {
       screen: ext('AddAReviewScreen'),
       props: {
@@ -134,14 +134,16 @@ export class ReviewLayoutScreen extends React.PureComponent {
         onClose: closeModal,
       },
     };
-    openInModal(route);
+    navigateTo(route);
   }
 
   mapToMap() {
     const { mapReviews, reviews, article, initialReviews } = this.props;
     console.log(reviews);
-    var newObj = {}, found = true, i = 0;
-    Object.keys(reviews[article.id]).map(function (dataKey, index) {
+    const newObj = {};
+    let found = true;
+    let i = 0;
+    _.keys(reviews[article.id]).reverse().map(function (dataKey, index) {
       if (i === 5) found = false;
       if (found) {
         newObj[dataKey] = reviews[article.id][dataKey];
@@ -154,18 +156,17 @@ export class ReviewLayoutScreen extends React.PureComponent {
 
   addAReview(rating) {
     console.log(this.props);
-    const { openInModal, closeModal, article } = this.props;
+    const { navigateTo, article } = this.props;
     console.log(rating);
     const route = {
       screen: ext('AddAReviewScreen'),
       props: {
         user: 'Billy',
         id: article.id,
-        onClose: closeModal,
         rating,
       },
     };
-    openInModal(route);
+    navigateTo(route);
   }
 
   renderUpNext() {
@@ -221,15 +222,23 @@ export class ReviewLayoutScreen extends React.PureComponent {
 
             <Title styleName="h-center">Reviews</Title>
             {
-              (initial !== undefined && initial[article.id] !== undefined && initial !== null && initial[article.id] !== null) ?
+              (initial !== undefined && initial[article.id] !== undefined
+                && initial !== null && initial[article.id] !== null) ?
                 <ListView
                   data={initial[article.id]}
                   renderRow={this.renderRow}
                   loading={loader.isLoading}
                 //  onLoadMore={this.getMoreReviews}
-                /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
+                />
+                :
+                loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
             }
-            <GameButtons article={article} addAReview={this.addAReview} openListScreen={this.openListScreen} getReviews={this.getReview} />
+            <GameButtons
+              article={article}
+              addAReview={this.addAReview}
+              openListScreen={this.openListScreen}
+              getReviews={this.getReview}
+            />
           </View>
           {this.renderUpNext()}
         </ScrollView>
