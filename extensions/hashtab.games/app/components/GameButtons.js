@@ -5,7 +5,7 @@ import {
   View,
   Button,
 } from '@shoutem/ui';
-import { Text, Dimensions } from 'react-native';
+import { Text, Dimensions, StyleSheet } from 'react-native';
 import { closeModal, openInModal, navigateTo } from '@shoutem/core/navigation';
 import { ext } from '../const';
 import { connect } from 'react-redux';
@@ -22,11 +22,11 @@ export class GameButtons extends Component {
     const { addAReview, openListScreen } = this.props
     return (
       <View style={{ flexDirection: 'row', width: Dimensions.get('window').width }}>
-        <Button onPress={() => addAReview()} style={{ marginHorizontal: 20 }}>
+        <Button onPress={() => addAReview()} style={{ marginHorizontal: 40 }}>
           <Icon name="like" />
           <Text>Add a Review</Text>
         </Button>
-        <Button onPress={() => openListScreen(this.props.article.id)} style={{ marginHorizontal: 20 }}>
+        <Button onPress={() => openListScreen(this.props.article.id)} style={{ marginHorizontal: 40 }}>
           <Icon name="refresh" />
           <Text>Load more</Text>
         </Button>
@@ -43,5 +43,13 @@ const mapDispatchToProps = {
 const mapStateToProps = (state) => {
   return {};
 };
+
+const styles = StyleSheet.create({
+  button: {
+    height: 20,
+    width: 20,
+  }
+});
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(connectStyle(ext('GameButtons'))(GameButtons));

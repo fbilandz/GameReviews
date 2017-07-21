@@ -24,19 +24,19 @@ export class Review extends Component {
             <Title>{this.props.data.username}</Title>
             <Subtitle>{moment(this.props.data.timeStamp).format('L')}</Subtitle>
           </View>
-          <View style={styles.row}>
+          <View style={styles.row} styleName="lg-gutter-left">
             <Title>{this.props.data.rating}</Title>
             <StarRating
+              starColor={'#fdbc50'}
               maxStars={1}
               disable
               rating={1}
               onSelectedStar={(star) => console.log(star)}
-              starSize={25}
+              starSize={22}
             />
           </View>
-
         </View>
-
+        <Text> </Text>
         <View styleName="horizontal h-center">
           <Text>{this.props.data.text}</Text>
         </View>
@@ -46,7 +46,6 @@ export class Review extends Component {
   }
 }
 
-const styles = StyleSheet.create();
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -65,6 +64,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
+    justifyContent: 'center',
   },
   space: {
     justifyContent: 'space-between',

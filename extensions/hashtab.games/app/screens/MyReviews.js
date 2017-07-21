@@ -3,14 +3,18 @@ import React, {
 } from 'react';
 
 import {
-  StyleSheet,
-  Text,
-  View,
+  Picker,
   TouchableOpacity,
+  Item,
 } from 'react-native';
+import {
+  reviewsLoaded,
+  reviewsFetchError,
+} from '../redux/actions';
 import { ListView } from '@shoutem/ui';
 import { connect } from 'react-redux';
 import { ext } from '../const';
+import { loginRequired } from 'shoutem.auth';
 import _ from 'lodash';
 import { Review } from '../components/Review';
 import { navigateTo } from '@shoutem/core/navigation';
@@ -21,13 +25,15 @@ export class MyReviews extends Component {
     this.state = {
       data: [],
       tried: false,
+      userReviews: null,
+      articleKeys: null,
     };
     this.getMyReviews = this.getMyReviews.bind(this);
     this.renderRow = this.renderRow.bind(this);
-    // this.getMyReviews();
+    this.getReviewByUser = this.getReviewByUser.bind(this);
   }
   componentWillMount() {
-    this.getMyReviews();
+    this.getReviewByUser();
   }
   getMyReviews() {
     const { reviews, userId } = this.props;
@@ -46,6 +52,47 @@ export class MyReviews extends Component {
       data: s,
       tried: true,
     });
+  }
+
+  mapToMap(reviews, keys, articleId) {
+    var newObj = {}, found = true, i = 0;
+    Object.keys(reviews[keys]).map(function (dataKey, index) {
+      newObj[dataKey] = reviews[articleId][dataKey];
+    });
+    console.log(newObj);
+    return newObj;
+  }
+
+  getReviewByUser(user) {
+    user = 'Billy';
+    fetch('https://gamereviewsapp.firebaseio.com/reviews/reviews/.json?auth=JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk&orderByChild=username&print=pretty')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        let userReviews = responseJson;
+        const articleKeys = Object.keys(responseJson);
+        const articleValues = Object.values(responseJson);
+        for (let i = 0; i < articleKeys.length; i++) {
+          let insert = {};
+          let currentValues = Object.values(Object.values(articleValues[i]));
+          let reviewKeys = Object.keys(articleValues[i]);
+          for (let j = 0; j < currentValues.length; j++) {
+            if (currentValues[j].username !== user) {
+              console.log(userReviews[articleKeys[i]][reviewKeys[j]]);
+              delete userReviews[articleKeys[i]][reviewKeys[j]];
+            }
+          }
+        }
+        console.log(articleKeys);
+        this.setState({
+          articleKeys,
+          userReviews,
+          tried: true,
+        });
+      })
+      .catch((error) => {
+        reviewsFetchError();
+        console.log(error);
+      });
   }
   edit(id, value) {
     const { navigateTo, article, userId } = this.props;
@@ -67,31 +114,37 @@ export class MyReviews extends Component {
     );
   }
   render() {
-    const { tried, data } = this.state;
+    // this.getReviewByUser();
+    const { tried, userReviews, articleKeys } = this.state;
     console.log(this.state);
-    if (!tried) this.getMyReviews();
-    return (
-
-      (data !== undefined || data !== null) ?
-        <ListView
-          data={data}
-          renderRow={this.renderRow}
-        /> : <Text>No reviews yet</Text>
+    if (!tried) this.getReviewByUser();
+    if (userReviews !== undefined || userReviews !== null) {
+      return (
+      (userReviews !== undefined || userReviews !== null) ? (
+        <Picker
+          mode="dropdown"
+          selectedValue={this.state.selected}
+          onValueChange={() => { }}
+        >
+          {
+            userReviews.map((item, index) => {
+              return (<Item label={item} value={index} key={index} />);
+            })
+          }
+        </Picker>) : <Text>No review yet</Text>
+      // (userReviews !== undefined || userReviews !== null) ?
+      // <ListView
+      //   data={userReviews}
+      //   renderRow={this.renderRow}
+      // /> : <Text>No reviews yet</Text>
 
     );
+  else {
+      reutrn; 
+    }  
+  }
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 20,
-  },
-});
 
 const mapStateToProps = (state) => {
   const { reviews } = state[ext()];
@@ -106,4 +159,4 @@ const mapDispatchToProps = {
   navigateTo,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyReviews);
+export default loginRequired(connect(mapStateToProps, mapDispatchToProps)(MyReviews));
