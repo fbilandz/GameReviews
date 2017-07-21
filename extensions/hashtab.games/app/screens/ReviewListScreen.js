@@ -4,6 +4,7 @@ import {
 } from '@shoutem/ui';
 import {
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import { Review } from '../components/Review';
 import { connect } from 'react-redux';
@@ -35,7 +36,9 @@ export class ReviewListScreen extends Component {
     console.log(reviews);
     const keys = Object.keys(map[article.id]);
     console.log(keys);
-    var newObj = {}, found = true, i = 0;
+    const newObj = {};
+    let found = true;
+    let i = 0;
     Object.keys(reviews[article.id]).map(function (dataKey, index) {
       if (i === 10) found = false;
       if (found) {
@@ -78,10 +81,13 @@ export class ReviewListScreen extends Component {
     const { reviews, map } = this.props;
     console.log('Loadanje');
     if (reviews[id].length === map[id].length) return null;
-    else return this.getMoreReviews;
+    return this.getMoreReviews;
   }
   renderRow(data, rowId) {
-    return <Review data={data} key={rowId} />;
+    let x = true;
+    return (
+      <Review data={data} key={rowId} expandable={x} />
+    );
   }
   render() {
     const { map, id, loader, article, reviews } = this.props;

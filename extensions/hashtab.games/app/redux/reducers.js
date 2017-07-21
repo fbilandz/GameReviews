@@ -36,7 +36,6 @@ const reviews = (state = {}, action) => {
       };
     case EDIT_REVIEW:
       const s = { ...state };
-      console.log(s);
       delete s[name];
       return {
         ...s,

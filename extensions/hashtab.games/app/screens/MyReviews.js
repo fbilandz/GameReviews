@@ -32,16 +32,7 @@ export class MyReviews extends Component {
   getMyReviews() {
     const { reviews, userId } = this.props;
     const s = [];
-    _.keys(reviews).map((value, index) => {
-      _.keys(reviews[value]).map((data, i) => {
-        if (reviews[value][data].userId === userId) {
-          const x = reviews[value][data];
-          x.id = data;
-          x.value = value;
-          s.push(x);
-        }
-      });
-    });
+
     this.setState({
       data: s,
       tried: true,
@@ -67,14 +58,15 @@ export class MyReviews extends Component {
     );
   }
   render() {
-    const { tried, data } = this.state;
-    console.log(this.state);
-    if (!tried) this.getMyReviews();
+    const { s } = this.props;
+    //const { tried, data } = this.state;
+    console.log("props iz my reviewsa", this.props);
+    //if (!tried) this.getMyReviews();
     return (
 
-      (data !== undefined || data !== null) ?
+      (s !== undefined || s !== null || s.length !== 0) ?
         <ListView
-          data={data}
+          data={s}
           renderRow={this.renderRow}
         /> : <Text>No reviews yet</Text>
 
@@ -96,8 +88,19 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   const { reviews } = state[ext()];
   const userId = _.get(state, ['shoutem.auth', 'user', 'id']);
+  const s = [];
+  _.keys(reviews).map((value, index) => {
+    _.keys(reviews[value]).map((data, i) => {
+      if (reviews[value][data].userId === userId) {
+        const x = reviews[value][data];
+        x.id = data;
+        x.value = value;
+        s.push(x);
+      }
+    });
+  });
   return {
-    reviews,
+    s,
     userId,
   };
 };
