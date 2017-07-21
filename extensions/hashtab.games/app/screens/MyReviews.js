@@ -31,11 +31,13 @@ export class MyReviews extends Component {
       userReviews: null,
       articleKeys: null,
     };
+    this.getGames = this.getGames.bind(this);
     this.getMyReviews = this.getMyReviews.bind(this);
     this.renderRow = this.renderRow.bind(this);
     this.getReviewByUser = this.getReviewByUser.bind(this);
   }
   componentWillMount() {
+    this.getGames();
     this.getReviewByUser();
   }
   getMyReviews() {
@@ -57,11 +59,31 @@ export class MyReviews extends Component {
     return newObj;
   }
 
-  getReviewByUser(user) {
-    user = 'Billy';
-    fetch('https://gamereviewsapp.firebaseio.com/reviews/reviews/.json?auth=JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk&orderByChild=username&print=pretty')
+  getGames() {
+    fetch('https://gamereviewsapp.firebaseio.com/reviews/reviews.json?auth=JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk&orderByChild=username&print=pretty')
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log(responseJson);
+        const articleKeys = Object.keys(responseJson);
+        this.setState({
+          articleKeys,
+          tried: true,
+        });
+      })
+      .catch((error) => {
+        reviewsFetchError();
+        console.log(error);
+      });
+  }
+
+
+  getReviewByUser(user, game) {
+    user = 'Billy';
+    game = 2512990;
+    fetch('https://gamereviewsapp.firebaseio.com/reviews/reviews/' + game + '.json?auth=JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk&orderByChild=username&print=pretty')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
         let userReviews = responseJson;
         const articleKeys = Object.keys(responseJson);
         const articleValues = Object.values(responseJson);
@@ -78,7 +100,6 @@ export class MyReviews extends Component {
         }
         console.log(articleKeys);
         this.setState({
-          articleKeys,
           userReviews,
           tried: true,
         });
@@ -109,7 +130,7 @@ export class MyReviews extends Component {
   }
   render() {
     const { s, loader } = this.props;
-    const { userReviews } = this.state;
+    const { userReviews, articleKeys } = this.state;
     // this.getReviewByUser();
     //const { tried, data } = this.state;
     console.log("props iz my reviewsa", this.state);
@@ -119,14 +140,20 @@ export class MyReviews extends Component {
         <Screen><Picker
           mode="dropdown"
           selectedValue={this.state.selected}
-          onValueChange={() => { }}
+          onValueChange={(itemValue, itemIndex) => {
+            this.setState({
+              selected: itemValue,
+              userReviews: this.getReviewByUser('Billy', itemValue),
+            });
+          }}
         >
           {
-            _.keys(userReviews).map((item, index) => {
-              return (<Item label={item} value={index} key={index} />);
+            _.keys(articleKeys).map((item, index) => {
+              return (<Item label={item} value={item} key={item} />);
             })
           }
         </Picker>
+          <Text>Izabrani state : {this.state.selected}</Text>
         </Screen>)
     }
     else if (loader.isLoading) {
