@@ -4,19 +4,17 @@ import React, {
 
 import {
   Text,
-  View,
   TextInput,
   Dimensions,
+  StyleSheet,
 } from 'react-native';
-import { Button } from '@shoutem/ui';
+import { Button, Screen } from '@shoutem/ui';
 import { connectStyle } from '@shoutem/theme';
 import { ext } from '../const';
-import StarRating from 'react-native-star-rating';
 import { connect } from 'react-redux';
-import { addAReview, mapReviews, editAReview } from '../redux/actions';
 import { loginRequired } from 'shoutem.auth';
-import moment from 'moment';
 import _ from 'lodash';
+import { closeModal, openInModal, navigateBack } from '@shoutem/core/navigation';
 
 export class AddAReviewScreen extends Component {
   static propTypes = {
@@ -27,12 +25,13 @@ export class AddAReviewScreen extends Component {
     super(props);
     console.log(this.props);
     this.state = {
-      review: "",
-      rating: props.rating !== undefined || props.rating !== null ? props.rating : 0,
+      review: '',
+      // rating: props.rating !== undefined || props.rating !== null ? props.rating : 0,
       props,
+
     };
-    this.addAReview = this.addAReview.bind(this);
-    this.editReview = this.editReview.bind(this);
+    this.rateIt = this.rateIt.bind(this);
+
   }
   componentWillMount() {
     if (this.state.props.review) {
@@ -41,114 +40,72 @@ export class AddAReviewScreen extends Component {
       });
     }
   }
-  editReview() {
-    const { userId, username, editAReview } = this.props;
-    const { review, rating, props } = this.state;
-    fetch('https://gamereviewsapp.firebaseio.com/reviews/reviews/' + props.id + '/' + props.name + '.json?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk',
-      {
-        method: 'PATCH',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text: review,
-          rating,
-          timeStamp: moment(),
-        }),
-      }
-    )
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-        console.log(this.state);
-        console.log(review);
-        editAReview({ text: review, rating, userId, username, timeStamp: responseJson.timeStamp }, props.name, props.id);
-        props.onClose();
-      });
-  }
-  addAReview() {
-    const { onClose, mapReview, addAReview, id, userId, username } = this.props;
-    console.log(this.state)
-    fetch('https://gamereviewsapp.firebaseio.com/reviews/reviews/' + this.props.id + '.json?auth=' + 'JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk',
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username,
-          userId,
-          text: this.state.review,
-          rating: this.state.rating,
-          timeStamp: moment(),
-        }),
-      }
-    )
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-        console.log(this.state);
-        addAReview({
-          rating: this.state.rating,
-          text: this.state.review,
-          username,
-        },
-          responseJson.name,
-          this.props.id
-        );
-        onClose();
-      });
+  rateIt() {
+    const { review } = this.state;
+    const { openInModal, closeModal, id, navigateBack } = this.props;
+    const route = {
+      screen: ext('RateScreen'),
+      props: {
+        onClose: closeModal,
+        review,
+        id,
+        navigateBack,
+      },
+    };
+    openInModal(route);
   }
   render() {
-    const styles = this.props.style;
+    // const styles = this.props.style;
     const { props } = this.state;
     console.log(this.props);
     return (
-      <View style={styles.container}>
+      <Screen styleName="full-screen paper" style={styles.container}>
         <TextInput
           style={styles.textInput}
           editable
           onChangeText={(text) => this.setState({ review: text })}
-          numberOfLines={4}
           multiline
+          numberOfLines={10}
           placeholder="Write a review"
           value={this.state.review}
           placeholderTextColor="orange"
         />
-        <StarRating
-          rating={this.state.rating}
-          selectedStar={(rate) => this.setState({ rating: rate })}
-          maxStars={10}
-        />
+
         <Button
-          onPress={props.type === 'EDIT' ? this.editReview : this.addAReview}
+          styleName="lg-gutter-horizontal lg-gutter-vertical"
+          onPress={this.rateIt}
         >
-          <Text>{props.type === 'EDIT' ? 'Edit' : 'Add'} a review</Text>
+          <Text style={styles.margine}>Rate it</Text>
         </Button>
-      </View>
+      </Screen>
     );
   }
 }
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text: {
-    fontSize: 20,
+  button: {
+    flex: 1,
   },
   textInput: {
+    marginTop: 55,
+    marginBottom: 5,
     width: Dimensions.get('window').width * 0.8,
+    alignSelf: 'center',
   },
-};
+  margine: {
+    marginVertical: 6,
+    marginHorizontal: 32,
+  },
+});
 const mapDispatchToProps = {
-  addAReview,
-  mapReviews,
-  editAReview,
+  openInModal,
+  closeModal,
+  navigateBack,
 };
 
 const mapStateToProps = (state) => {
@@ -163,7 +120,6 @@ const mapStateToProps = (state) => {
 
 export default loginRequired(
   connect(mapStateToProps, mapDispatchToProps)(
-    connectStyle(
-      ext('AddAReviewScreen'), styles)(AddAReviewScreen)
+    AddAReviewScreen
   )
 );

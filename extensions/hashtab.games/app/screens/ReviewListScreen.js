@@ -4,6 +4,7 @@ import {
 } from '@shoutem/ui';
 import {
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import { Review } from '../components/Review';
 import { connect } from 'react-redux';
@@ -17,8 +18,18 @@ import {
   mapReviews,
 } from '../redux/actions';
 import { ext } from '../const';
+import _ from 'lodash';
 
 export class ReviewListScreen extends Component {
+  static propTypes = {
+    getReviews: React.PropTypes.func,
+    map: React.PropTypes.object,
+    mapReviews: React.PropTypes.func,
+    article: React.PropTypes.object,
+    reviews: React.PropTypes.object,
+    loader: React.PropTypes.object,
+    id: React.PropTypes.string,
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -27,47 +38,53 @@ export class ReviewListScreen extends Component {
     this.getMoreReviews = this.getMoreReviews.bind(this);
     this.noMoreReviews = this.noMoreReviews.bind(this);
     this.initialReviews = this.initialReviews.bind(this);
-    this.initialReviews();
+    this.refresh = this.refresh.bind(this);
   }
-
-  initialReviews() {
-    const { mapReviews, article, reviews, map, initialReviews } = this.props;
-    console.log(reviews);
-    const keys = Object.keys(map[article.id]);
-    console.log(keys);
-    var newObj = {}, found = true, i = 0;
-    Object.keys(reviews[article.id]).map(function (dataKey, index) {
-      if (i === 10) found = false;
-      if (found) {
-        newObj[dataKey] = reviews[article.id][dataKey];
-        i++;
-      }
-      var ind = 0;
-      console.log(dataKey);
-      for (; ind < keys.length; ind++) {
-        if (keys[ind] == dataKey.toString()) break;
-      }
-      if (ind !== keys.length) i--;
-    });
-    console.log(newObj);
-    mapReviews(newObj, article.id);
+  componentWillMount() {
+    this.initialReviews();
   }
   getMoreReviews() {
     const { mapReviews, article, reviews, map } = this.props;
     console.log(reviews);
     const keys = Object.keys(map[article.id]);
     console.log(keys);
-    var newObj = {}, found = true, i = 0;
-    Object.keys(reviews[article.id]).map(function (dataKey, index) {
+    const newObj = {};
+    let found = true;
+    let i = 0;
+    _.keys(reviews[article.id]).map(function (dataKey) {
       if (i === 5) found = false;
       if (found) {
         newObj[dataKey] = reviews[article.id][dataKey];
         i++;
       }
-      var ind = 0;
+      let ind = 0;
       console.log(dataKey);
       for (; ind < keys.length; ind++) {
         if (keys[ind] === dataKey.toString()) break;
+      }
+      if (ind !== keys.length) i--;
+    });
+    console.log(newObj);
+    mapReviews(newObj, article.id);
+  }
+  initialReviews() {
+    const { mapReviews, article, reviews, map } = this.props;
+    console.log(reviews);
+    const keys = _.keys(map[article.id]);
+    console.log(keys);
+    const newObj = {};
+    let found = true;
+    let i = 0;
+    _.keys(reviews[article.id]).map(function (dataKey, index) {
+      if (i === 10) found = false;
+      if (found) {
+        newObj[dataKey] = reviews[article.id][dataKey];
+        i++;
+      }
+      let ind = 0;
+      console.log(dataKey);
+      for (; ind < keys.length; ind++) {
+        if (keys[ind] == dataKey.toString()) break;
       }
       if (ind !== keys.length) i--;
     });
@@ -78,13 +95,21 @@ export class ReviewListScreen extends Component {
     const { reviews, map } = this.props;
     console.log('Loadanje');
     if (reviews[id].length === map[id].length) return null;
-    else return this.getMoreReviews;
+    return this.getMoreReviews;
+  }
+  refresh() {
+    const { getReviews } = this.props;
+    getReviews();
+    this.getMoreReviews();
   }
   renderRow(data, rowId) {
-    return <Review data={data} key={rowId} />;
+    let x = true;
+    return (
+      <Review data={data} key={rowId} expandable={x} />
+    );
   }
   render() {
-    const { map, id, loader, article, reviews } = this.props;
+    const { map, id, loader, getReviews } = this.props;
     return (
       (map !== undefined && map[id] !== undefined && map !== null && map[id] !== null) ?
         <ListView
@@ -92,6 +117,7 @@ export class ReviewListScreen extends Component {
           renderRow={this.renderRow}
           loading={loader.isLoading}
           onLoadMore={this.getMoreReviews}
+          onRefresh={() => this.refresh()}
         />
         :
         loader.isLoading ?

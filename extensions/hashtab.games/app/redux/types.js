@@ -8,3 +8,4 @@ export const MAP_REVIEWS = 'hashtab.games.MAP_REVIEWS';
 export const MAP_REVIEW = 'hashtab.games.MAP_REVIEW';
 export const INITIAL = 'hashtab.games.INITIAL';
 export const EDIT_REVIEW = 'hashtab.games.EDIT_REVIEW';
+export const INVERT = 'hashtab.games.INVERT';

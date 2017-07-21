@@ -38,16 +38,7 @@ export class MyReviews extends Component {
   getMyReviews() {
     const { reviews, userId } = this.props;
     const s = [];
-    _.keys(reviews).map((value, index) => {
-      _.keys(reviews[value]).map((data, i) => {
-        if (reviews[value][data].userId === userId) {
-          const x = reviews[value][data];
-          x.id = data;
-          x.value = value;
-          s.push(x);
-        }
-      });
-    });
+
     this.setState({
       data: s,
       tried: true,
@@ -114,34 +105,19 @@ export class MyReviews extends Component {
     );
   }
   render() {
-    // this.getReviewByUser();
-    const { tried, userReviews, articleKeys } = this.state;
-    console.log(this.state);
-    if (!tried) this.getReviewByUser();
-    if (userReviews !== undefined || userReviews !== null) {
-      return (
-      (userReviews !== undefined || userReviews !== null) ? (
-        <Picker
-          mode="dropdown"
-          selectedValue={this.state.selected}
-          onValueChange={() => { }}
-        >
-          {
-            userReviews.map((item, index) => {
-              return (<Item label={item} value={index} key={index} />);
-            })
-          }
-        </Picker>) : <Text>No review yet</Text>
-      // (userReviews !== undefined || userReviews !== null) ?
-      // <ListView
-      //   data={userReviews}
-      //   renderRow={this.renderRow}
-      // /> : <Text>No reviews yet</Text>
+    const { s } = this.props;
+    //const { tried, data } = this.state;
+    console.log("props iz my reviewsa", this.props);
+    //if (!tried) this.getMyReviews();
+    return (
+
+      (s !== undefined || s !== null || s.length !== 0) ?
+        <ListView
+          data={s}
+          renderRow={this.renderRow}
+        /> : <Text>No reviews yet</Text>
 
     );
-  else {
-      reutrn; 
-    }  
   }
   }
 }
@@ -149,8 +125,19 @@ export class MyReviews extends Component {
 const mapStateToProps = (state) => {
   const { reviews } = state[ext()];
   const userId = _.get(state, ['shoutem.auth', 'user', 'id']);
+  const s = [];
+  _.keys(reviews).map((value, index) => {
+    _.keys(reviews[value]).map((data, i) => {
+      if (reviews[value][data].userId === userId) {
+        const x = reviews[value][data];
+        x.id = data;
+        x.value = value;
+        s.push(x);
+      }
+    });
+  });
   return {
-    reviews,
+    s,
     userId,
   };
 };

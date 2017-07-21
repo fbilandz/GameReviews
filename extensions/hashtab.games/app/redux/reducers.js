@@ -9,6 +9,7 @@ import {
   MAP_REVIEW,
   EDIT_REVIEW,
   INITIAL,
+  INVERT,
 } from './types';
 
 import _ from 'lodash';
@@ -36,13 +37,11 @@ const reviews = (state = {}, action) => {
       };
     case EDIT_REVIEW:
       const s = { ...state };
-      console.log(s);
       delete s[name];
       return {
         ...s,
         [name]: { ...payload },
       };
-
     default:
       return state;
   }

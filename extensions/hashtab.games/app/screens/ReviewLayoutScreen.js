@@ -106,6 +106,7 @@ export class ReviewLayoutScreen extends Component {
       props: {
         article,
         id,
+        getReviews: this.getReview,
       },
     };
     navigateTo(route);
@@ -113,7 +114,7 @@ export class ReviewLayoutScreen extends Component {
 
   addAReview() {
     console.log(this.props);
-    const { openInModal, closeModal, article } = this.props;
+    const { navigateTo, article } = this.props;
     const route = {
       screen: ext('AddAReviewScreen'),
       props: {
@@ -121,14 +122,16 @@ export class ReviewLayoutScreen extends Component {
         onClose: closeModal,
       },
     };
-    openInModal(route);
+    navigateTo(route);
   }
 
   mapToMap() {
     const { mapReviews, reviews, article, initialReviews } = this.props;
     console.log(reviews);
-    var newObj = {}, found = true, i = 0;
-    Object.keys(reviews[article.id]).map(function (dataKey, index) {
+    const newObj = {};
+    let found = true;
+    let i = 0;
+    _.keys(reviews[article.id]).reverse().map(function (dataKey, index) {
       if (i === 5) found = false;
       if (found) {
         newObj[dataKey] = reviews[article.id][dataKey];
@@ -141,18 +144,17 @@ export class ReviewLayoutScreen extends Component {
 
   addAReview(rating) {
     console.log(this.props);
-    const { openInModal, closeModal, article } = this.props;
+    const { navigateTo, article } = this.props;
     console.log(rating);
     const route = {
       screen: ext('AddAReviewScreen'),
       props: {
         user: 'Billy',
         id: article.id,
-        onClose: closeModal,
         rating,
       },
     };
-    openInModal(route);
+    navigateTo(route);
   }
 
   renderUpNext() {
@@ -178,6 +180,16 @@ export class ReviewLayoutScreen extends Component {
     //  const { data } = this.state;
     const articleImage = article.image ? { uri: _.get(article, 'image.url') } : undefined;
     console.log(initial);
+    if (loader.isLoading) {
+      return (
+        <Screen styleName="full-screen paper" style={{ justifyContent: 'center' }}>
+          <NavigationBar
+            title={article.title}
+          />
+          <ActivityIndicator size="large" style={{ alignSelf: 'center' }} />
+        </Screen>
+      );
+    }
     return (
       <Screen styleName="full-screen paper">
         <NavigationBar
@@ -196,15 +208,32 @@ export class ReviewLayoutScreen extends Component {
 
             <Title styleName="h-center">Reviews</Title>
             {
+<<<<<<< HEAD
               ( initial !== undefined && initial[article.id] !== undefined && initial !== null && initial[article.id] !== null) ?
+=======
+              (initial !== undefined && initial[article.id] !== undefined
+                && initial !== null && initial[article.id] !== null) ?
+>>>>>>> cbe6481749127ccc15330f840040cf711c648b01
                 <ListView
                   data={initial[article.id]}
                   renderRow={this.renderRow}
                   loading={loader.isLoading}
                 //  onLoadMore={this.getMoreReviews}
-                /> : loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
+                />
+                :
+                loader.isLoading ? <ActivityIndicator size="small" /> : <Text>No reviews yet</Text>
             }
+<<<<<<< HEAD
             <GameButtons article={article} addAReview={this.addAReview} openListScreen={this.openListScreen} />
+=======
+            <GameButtons
+              article={article}
+              addAReview={this.addAReview}
+              openListScreen={this.openListScreen}
+              getReviews={this.getReview}
+            />
+          </View>
+>>>>>>> cbe6481749127ccc15330f840040cf711c648b01
           {this.renderUpNext()}
         </ScrollView>
       </Screen>

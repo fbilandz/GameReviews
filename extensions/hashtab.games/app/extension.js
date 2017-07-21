@@ -8,7 +8,7 @@ import AddAReviewScreen from './screens/AddAReviewScreen';
 import ReviewListScreen from './screens/ReviewListScreen';
 import MyReviews from './screens/MyReviews';
 import FullReviewScreen from './screens/FullReviewScreen';
-
+import RateScreen from './screens/RateScreen';
 // themes imports
 
 
@@ -18,6 +18,7 @@ export const screens = {
   ReviewListScreen,
   MyReviews,
   FullReviewScreen,
+  RateScreen,
 };
 
 export const themes = {
