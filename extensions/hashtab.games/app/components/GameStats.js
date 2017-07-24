@@ -4,6 +4,8 @@ import {
   Title,
   Subtitle,
   View,
+  Divider,
+  Html,
 } from '@shoutem/ui';
 import moment from 'moment';
 import { ext } from '../const';
@@ -37,6 +39,9 @@ export class GameStats extends React.PureComponent {
             </Subtitle>
           </View>
         </View>
+        <Divider styleName="line" />
+        <Title styleName="h-center">About</Title>
+        <Html body={this.props.article.body} />
       </View>
     );
   }

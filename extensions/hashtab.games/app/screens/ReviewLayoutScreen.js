@@ -203,9 +203,8 @@ export class ReviewLayoutScreen extends Component {
         />
         <ScrollView>
           <GameBanner article={article} articleImage={articleImage} />
-          <GameStats lastReview={this.state.lastReview} rating={this.state.rating} />
+          <GameStats lastReview={this.state.lastReview} rating={this.state.rating} article={article} />
           <Divider styleName="line" />
-
           <Title styleName="h-center">Reviews</Title>
           {
             (initial !== undefined && initial[article.id] !== undefined

@@ -12,7 +12,8 @@ import {
 import {
   reviewsLoaded,
   reviewsFetchError,
-  reviewsLoading
+  reviewsLoading,
+  addReviews,
 } from '../redux/actions';
 import { ListView, Screen } from '@shoutem/ui';
 import { connect } from 'react-redux';
@@ -34,11 +35,17 @@ export class MyReviews extends Component {
     this.getGames = this.getGames.bind(this);
     this.getMyReviews = this.getMyReviews.bind(this);
     this.renderRow = this.renderRow.bind(this);
-    this.getReviewByUser = this.getReviewByUser.bind(this);
+    // his.getReviewByUser = this.getReviewByUser.bind(this);
   }
   componentWillMount() {
     this.getGames();
-    this.getReviewByUser();
+  }
+  getSomething() {
+    const { articleKeys } = this.state;
+    const { userId } = this.state;
+    _.keys(articleKeys).map((value, index) => {
+      this.getReviewByUser(userId, value);
+    });
   }
   getMyReviews() {
     const { reviews, userId } = this.props;
@@ -60,55 +67,44 @@ export class MyReviews extends Component {
   }
 
   getGames() {
+    const { reviewsLoading, reviewsLoaded, userId, addReviews } = this.props;
+    reviewsLoading();
     fetch('https://gamereviewsapp.firebaseio.com/reviews/reviews.json?auth=JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk&orderByChild=username&print=pretty')
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson);
         const articleKeys = Object.keys(responseJson);
-        this.setState({
-          articleKeys,
-          tried: true,
-        });
-      })
-      .catch((error) => {
-        reviewsFetchError();
-        console.log(error);
-      });
-  }
-
-
-  getReviewByUser(user, game) {
-    user = 'Billy';
-    game = 2512990;
-    fetch('https://gamereviewsapp.firebaseio.com/reviews/reviews/' + game + '.json?auth=JfsF3SK5tnCZPlC3FG1XXKeon7U3LVk0kZ2SZ6Uk&orderByChild=username&print=pretty')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-        let userReviews = responseJson;
-        const articleKeys = Object.keys(responseJson);
+        const userReviews = responseJson;
+        for (let i = 0; i < articleKeys.length; i++) {
+          addReviews(userReviews[articleKeys[i]], articleKeys[i]);
+        }
         const articleValues = Object.values(responseJson);
         for (let i = 0; i < articleKeys.length; i++) {
-          let insert = {};
           let currentValues = Object.values(Object.values(articleValues[i]));
           let reviewKeys = Object.keys(articleValues[i]);
+          console.log(currentValues, reviewKeys);
           for (let j = 0; j < currentValues.length; j++) {
-            if (currentValues[j].username !== user) {
+            if (currentValues[j].userId !== userId) {
               console.log(userReviews[articleKeys[i]][reviewKeys[j]]);
               delete userReviews[articleKeys[i]][reviewKeys[j]];
             }
           }
         }
-        console.log(articleKeys);
         this.setState({
-          userReviews,
+          articleKeys,
           tried: true,
+          userReviews,
+          selected: articleKeys[0],
         });
+        reviewsLoaded();
       })
       .catch((error) => {
         reviewsFetchError();
         console.log(error);
       });
   }
+
+
   edit(id, value) {
     const { navigateTo, article, userId } = this.props;
     const route = {
@@ -121,6 +117,10 @@ export class MyReviews extends Component {
     };
     navigateTo(route);
   }
+  renderPicker(item, index) {
+    console.log(item, index);
+    return (<Picker.Item label={item} value={item} key={index} />);
+  }
   renderRow(data, id) {
     return (
       <TouchableOpacity onPress={() => this.edit(data.id, data.value)}>
@@ -130,38 +130,44 @@ export class MyReviews extends Component {
   }
   render() {
     const { s, loader } = this.props;
-    const { userReviews, articleKeys } = this.state;
-    // this.getReviewByUser();
-    //const { tried, data } = this.state;
-    console.log("props iz my reviewsa", this.state);
-    //if (!tried) this.getMyReviews();
+    const { userReviews, articleKeys, selected } = this.state;
+    // sthis.getReviewByUser();
+    //  const { tried, data } = this.state;
+    console.log('props iz my reviewsa', this.state);
+    //  if (!tried) this.getMyReviews();
     if (userReviews !== null) {
       return (
-        <Screen><Picker
-          mode="dropdown"
-          selectedValue={this.state.selected}
-          onValueChange={(itemValue, itemIndex) => {
-            this.setState({
-              selected: itemValue,
-              userReviews: this.getReviewByUser('Billy', itemValue),
-            });
-          }}
-        >
-          {
-            _.keys(articleKeys).map((item, index) => {
-              return (<Item label={item} value={item} key={item} />);
-            })
-          }
-        </Picker>
-          <Text>Izabrani state : {this.state.selected}</Text>
-        </Screen>)
+        <Screen>
+          <Picker
+            mode="dropdown"
+            selectedValue={selected}
+            onValueChange={(itemValue, itemIndex) => {
+              this.setState({
+                selected: itemValue,
+              });
+            }}
+          >
+            {
+              _.keys(articleKeys).map((item, index) => {
+                return this.renderPicker(articleKeys[item], index);
+              })
+            }
+          </Picker>
+          <ListView
+            data={userReviews[selected]}
+            renderRow={this.renderRow}
+          />
+        </Screen>
+      );
     }
     else if (loader.isLoading) {
       return (<ActivityIndicator size="large" />);
     }
-    return (
-      <Text>No reviews yet</Text>
-    );
+    else {
+      return (
+        <Text>No reviews yet</Text>
+      );
+    }
   }
 }
 
@@ -188,6 +194,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   navigateTo,
+  reviewsLoaded,
+  reviewsLoading,
+  reviewsFetchError,
+  addReviews,
 };
 
 export default loginRequired(connect(mapStateToProps, mapDispatchToProps)(MyReviews));
